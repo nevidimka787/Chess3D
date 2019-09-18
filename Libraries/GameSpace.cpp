@@ -11,7 +11,7 @@ GameSpace::GameSpace(int type_of_game)
 	*weight = 8;
 	*height = 8;
 	//int *points = new int[*lenght * *weight * *height];
-	List *list = new List(type_of_game);
+	List* list = new List(type_of_game);
 	for (int n = 0; n < *lenght * *weight * *height; n++)
 	{
 		points[n] = list->Get(n);
@@ -1286,7 +1286,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 
 void GameSpace::ReplasePoints(int number1, int number2)
 {
-	int *point = new int;
+	int* point = new int;
 	*point = points[number1];
 	points[number1] = points[number2];
 	points[number2] = *point;
@@ -1295,7 +1295,7 @@ void GameSpace::ReplasePoints(int number1, int number2)
 
 void GameSpace::ReplasePoints(int x1, int y1, int z1, int number2)
 {
-	int *point = new int;
+	int* point = new int;
 	*point = points[x1 + y1 * 8 + z1 * 64];
 	points[x1 + y1 * 8 + z1 * 64] = points[number2];
 	points[number2] = *point;
@@ -1304,7 +1304,7 @@ void GameSpace::ReplasePoints(int x1, int y1, int z1, int number2)
 
 void GameSpace::ReplasePoints(int x1, int y1, int z1, int x2, int y2, int z2)
 {
-	int *point = new int;
+	int* point = new int;
 	*point = points[x1 + y1 * 8 + z1 * 64];
 	points[x1 + y1 * 8 + z1 * 64] = points[x2 + y2 * 8 + z2 * 64];
 	points[x2 + y2 * 8 + z2 * 64] = *point;
@@ -1343,7 +1343,7 @@ void GameSpace::Show(int plane_z)
 					cout << "  " << points[x + y * 8 + plane_z * 64] << " ";
 				}
 			}
-			cout << endl << endl << endl;
+			cout << endl << endl;
 		}
 	}
 }
