@@ -836,7 +836,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -860,7 +860,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -884,7 +884,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -908,7 +908,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -932,7 +932,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -956,7 +956,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -980,7 +980,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1004,7 +1004,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1028,7 +1028,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1069,7 +1069,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = -1)
+				if (points[num_w_king] == -1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1093,7 +1093,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1117,7 +1117,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1141,7 +1141,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1165,7 +1165,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1189,7 +1189,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1213,7 +1213,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1237,7 +1237,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
@@ -1261,7 +1261,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
-				if (points[num_w_king] = 1)
+				if (points[num_w_king] == 1)
 				{
 					for (int number = 0; number < 512; number++)
 					{
