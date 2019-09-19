@@ -27,6 +27,11 @@ GameSpace::GameSpace(int type_of_game)
 	delete list;
 }
 
+bool GameSpace::CanGo(int number, int end_number)
+{
+	return CanGo(number, end_number % *lenght, (end_number / *weight) % *lenght, (end_number / *weight / *height) % *lenght);
+}
+
 bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 {
 
@@ -778,6 +783,72 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	return false;
 }
 
+int GameSpace::GetPoint(int number)
+{
+	return points[number];
+}
+
+int GameSpace::GetPoint(int x, int y, int z)
+{
+	return points[x + y * 8 + z * 64];
+}
+
+bool GameSpace::Mat(bool to_black)
+{
+	int king_number = 0;
+	bool mat = false;
+	if (to_black)//If mat is to black.
+	{
+		for (int number = 0; number < *lenght * *weight * *height; number++)
+		{
+			if (points[number] == -1)
+			{
+				king_number = number;
+			}
+		}
+		for (int number = 0; number < *lenght * *weight * *height; number++)
+		{
+			if (points[number] > 0 && CanGo(number, king_number))
+			{
+				mat = true;
+			}
+		}
+		for (int number = 0; number < *lenght * *weight * *height; number++)
+		{
+			if (MeetGameRule(points[king_number], number))
+			{
+				mat = false;
+			}
+		}
+	}
+	else//If mat is to white.
+	{
+		for (int number = 0; number < *lenght * *weight * *height; number++)
+		{
+			if (points[number] == 1)
+			{
+				king_number = number;
+				break;
+			}
+		}
+		for (int number = 0; number < *lenght * *weight * *height; number++)
+		{
+			if (points[number] < 0 && CanGo(number, king_number))
+			{
+				mat = true;
+			}
+		}
+		for (int number = 0; number < *lenght * *weight * *height; number++)
+		{
+			if (MeetGameRule(points[king_number], number))
+			{
+				mat = false;
+			}
+		}
+	}
+	return mat;
+}
+
 void GameSpace::MoveWhite()//white_move = true; black_move = false
 {
 	*white_move = true;
@@ -790,14 +861,9 @@ void GameSpace::MoveBlack()//white_move = false; black_move = true
 	*black_move = true;
 }
 
-int GameSpace::GetPoint(int number)
+bool GameSpace::MeetGameRule(int number, int end_number)
 {
-	return points[number];
-}
-
-int GameSpace::GetPoint(int x, int y, int z)
-{
-	return points[x + y * 8 + z * 64];
+	return MeetGameRule(number % *lenght, (end_number / *weight) % *lenght, (end_number / *weight / *height) % *lenght, end_number % *lenght, (end_number / *weight) % *lenght, (end_number / *weight / *height) % *lenght);
 }
 
 bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end)
@@ -1390,4 +1456,43 @@ void GameSpace::ShowInformation()
 	default:
 		break;
 	}
+}
+
+bool GameSpace::Way()
+{
+	bool way = false, white_king_is_only = true, black_king_is_only = true;
+	int white_king_number = 0, black_king_number = 0;
+	for (int number = 0; number < *lenght * *weight * *height; number++)
+	{
+		if (points[number] == 1)
+		{
+			white_king_number = number;
+			break;
+		}
+		if (points[number] == -1)
+		{
+			black_king_number = number;
+			break;
+		}
+		if (points[number] > 0)
+		{
+			white_king_is_only = false;
+		}
+		if (points[number] < 0)
+		{
+			black_king_is_only = false;
+		}
+	}
+	for (int number = 0; number < *lenght * *weight * *height; number++)
+	{
+		if (MeetGameRule(points[white_king_number], number) || !white_king_is_only)
+		{
+			way = false;
+		}
+		if (MeetGameRule(points[black_king_number], number) || !black_king_is_only)
+		{
+			way = false;
+		}
+	}
+	return way;
 }
