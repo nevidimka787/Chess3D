@@ -300,24 +300,24 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2)
 		{//it is knight diagonal
-			if (points[x_end + y_end * 8 + z_end * 64] > 0)
+			if (points[x_end + y_end * 8 + z_end * 64] <= 0)
 			{
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 		break;
 	}
 	case 8://WHITE knight
 	{
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 2 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1)
 		{//it is knight diagonal
-			if (points[x_end + y_end * 8 + z_end * 64] > 0)
+			if (points[x_end + y_end * 8 + z_end * 64] <= 0)
 			{
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 		break;
 	}
 	case 9://WHITE rook
@@ -398,7 +398,6 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 				}
 				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
 				{
-
 					return false;
 				}
 			}
@@ -671,24 +670,25 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2)
 		{//it is knight diagonal
-			if (points[x_end + y_end * 8 + z_end * 64] < 0)
+			if (points[x_end + y_end * 8 + z_end * 64] >= 0)
 			{
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 		break;
 	}
 	case -8://BLACK knight
 	{
+		cout << x_start - x_end << endl << y_start - y_end << endl << z_start - z_end << endl;
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 2 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1)
 		{//it is knight diagonal
-			if (points[x_end + y_end * 8 + z_end * 64] < 0)
+			if (points[x_end + y_end * 8 + z_end * 64] >= 0)
 			{
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 		break;
 	}
 	case -9://BLACK rook
@@ -1091,6 +1091,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	{
 		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
 		{
+			cout << true << endl;
 			points[x_start + y_start * 8 + z_start * 64] = 0;
 			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
 			{
