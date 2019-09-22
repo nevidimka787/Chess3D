@@ -4,13 +4,16 @@
 
 #include<iostream>
 #include<string>
+
 using namespace std;
 
 int main()
 {
+	
 	bool* game_go = new bool;
 	*game_go = true;
-	GameSpace* gamespase1 = new GameSpace(1);
+	List* list = new List(1);
+	GameSpace* gamespase1 = new GameSpace(*list);
 	int* figure_x = new int, * figure_y = new int, * figure_z = new int, * target_x = new int, * target_y = new int, * target_z = new int;
 	cout << "Game start." << endl;
 	gamespase1->ShowInformation();
@@ -56,4 +59,5 @@ int main()
 		}
 	cout << "Game over" << endl;
 	cin >> *game_go;
+	
 }
