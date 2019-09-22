@@ -1,20 +1,18 @@
 #include"GameSpace.h"
-#include"List.h"
 #include<iostream>
 
 using namespace std;
 
-GameSpace::GameSpace(int type_of_game)
+GameSpace::GameSpace(List list)
 {
-	*type = type_of_game;
-	*lenght = 8;
-	*weight = 8;
-	*height = 8;
+	*type = list.GetElement(3);
+	*lenght = list.GetElement(0);
+	*weight = list.GetElement(1);
+	*height = list.GetElement(2);
 	//int *points = new int[*lenght * *weight * *height];
-	List* list = new List(type_of_game);
 	for (int n = 0; n < *lenght * *weight * *height; n++)
 	{
-		points[n] = list->Get(n);
+		points[n] = list.Get(n);
 		if (points[n] == 0)
 		{
 			start_points[n] = false;
@@ -24,7 +22,6 @@ GameSpace::GameSpace(int type_of_game)
 			start_points[n] = true;
 		}
 	}
-	delete list;
 }
 
 bool GameSpace::CanGo(int number, int end_number)
@@ -35,49 +32,14 @@ bool GameSpace::CanGo(int number, int end_number)
 bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 {
 
-	int x_start = number % 8, y_start = (number / 8) % 8, z_start = (number / 64) % 8;
-	int x, y, z;
+	int x_start = number % *lenght , y_start = (number / *lenght ) % *weight, z_start = (number / *lenght * *weight) % *height;
 	switch (points[number])
 	{
 	case 1://WHITE king
 	{
 		if (abs(x_start - x_end) == 1 || abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1)
 		{//can go on the one point in all sides
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x_start != x_end || y_start != y_end || z_start != z_end)
-			{
-				if (x_start < x_end)
-				{
-					x++;
-				}
-				else if (x_start > x_end)
-				{
-					x--;
-				}
-				if (y_start < y_end)
-				{
-					y++;
-				}
-				else if (y_start > y_end)
-				{
-					y--;
-				}
-				if (z_start < z_end)
-				{
-					z++;
-				}
-				else if (z_start > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
-				{
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
@@ -85,42 +47,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end || x_start == x_end || y_start == y_end || z_start == z_end))
 		{//can go on all points in all sides
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
@@ -128,42 +55,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == abs(y_start - y_end) && abs(y_start - y_end) == abs(z_start - z_end) || x_start == x_end && y_start == y_end || y_start == y_end && z_start == z_end || z_start == z_end && x_start == x_end)
 		{//can go on all points can't go on diagonal
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
@@ -171,42 +63,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if ((x_start == x_end || y_start == y_end || z_start == z_end) && (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end)))
 		{//can't go in double diagonal
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
@@ -214,42 +71,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == abs(y_start - y_end) && abs(y_start - y_end) == abs(z_start - z_end))
 		{//can go on only double diagonal
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
@@ -257,42 +79,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == abs(y_start - y_end) && z_start == z_end || abs(y_start - y_end) == abs(x_start - z_end) && x_start == x_end || abs(z_start - z_end) == abs(x_start - x_end) || y_start == y_end)
 		{//can go on only diagonal
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
@@ -300,7 +87,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2)
 		{//it is knight diagonal
-			if (points[x_end + y_end * 8 + z_end * 64] <= 0)
+			if (points[x_end + y_end * *lenght + z_end * *lenght * *weight] <= 0)
 			{
 				return true;
 			}
@@ -312,7 +99,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 2 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1)
 		{//it is knight diagonal
-			if (points[x_end + y_end * 8 + z_end * 64] <= 0)
+			if (points[x_end + y_end * *lenght + z_end * *lenght * *weight] <= 0)
 			{
 				return true;
 			}
@@ -324,84 +111,15 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end))
 		{
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
 	case 10://WHITE pawn
 	{
-		if (x_start - x_end == -1 || start_points[x_start + y_start * 8 + z_start * 64] && x_start - x_end == -2 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * 8 + z_end * 64] < 0))
+		if (x_start - x_end == -1 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == -2 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] < 0))
 		{// can go only forvard OR eat figures on diagonals OR doouble diagonals
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
-				{
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
@@ -409,41 +127,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == 1 || abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1)
 		{//can go on the one point in all sides
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x_start != x_end || y_start != y_end || z_start != z_end)
-			{
-				if (x_start < x_end)
-				{
-					x++;
-				}
-				else if (x_start > x_end)
-				{
-					x--;
-				}
-				if (y_start < y_end)
-				{
-					y++;
-				}
-				else if (y_start > y_end)
-				{
-					y--;
-				}
-				if (z_start < z_end)
-				{
-					z++;
-				}
-				else if (z_start > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] < 0)
-				{
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
@@ -452,42 +136,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 
 		if (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end || x_start == x_end || y_start == y_end || z_start == z_end))
 		{//can go on all points in all sides
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] < 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 
@@ -497,42 +146,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 
 		if (abs(x_start - x_end) == abs(y_start - y_end) && abs(y_start - y_end) == abs(z_start - z_end) || x_start == x_end && y_start == y_end || y_start == y_end && z_start == z_end || z_start == z_end && x_start == x_end)
 		{//can go on all points can't go on diagonal
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] < 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 
@@ -541,42 +155,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if ((x_start == x_end || y_start == y_end || z_start == z_end) && (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end)))
 		{//can't go in double diagonal
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] < 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
@@ -584,42 +163,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == abs(y_start - y_end) && abs(y_start - y_end) == abs(z_start - z_end))
 		{//can go on only double diagonal
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] < 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
@@ -627,42 +171,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == abs(y_start - y_end) && z_start == z_end || abs(y_start - y_end) == abs(x_start - z_end) && x_start == x_end || abs(z_start - z_end) == abs(x_start - x_end) || y_start == y_end)
 		{//can go on only diagonal
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] > 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
@@ -670,7 +179,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2)
 		{//it is knight diagonal
-			if (points[x_end + y_end * 8 + z_end * 64] >= 0)
+			if (points[x_end + y_end * *lenght  + z_end * *lenght * *weight] >= 0)
 			{
 				return true;
 			}
@@ -683,7 +192,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 		cout << x_start - x_end << endl << y_start - y_end << endl << z_start - z_end << endl;
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 2 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1)
 		{//it is knight diagonal
-			if (points[x_end + y_end * 8 + z_end * 64] >= 0)
+			if (points[x_end + y_end * *lenght + z_end * *lenght * *weight] >= 0)
 			{
 				return true;
 			}
@@ -695,85 +204,15 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end))
 		{
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] < 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
 	case -10://BLACK pawn
 	{
-		if (x_start - x_end == 1 || start_points[x_start + y_start * 8 + z_start * 64] && x_start - x_end == 2 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * 8 + z_end * 64] > 0))
+		if (x_start - x_end == 1 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == 2 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] > 0))
 		{// can go only forvard OR eat figures on diagonals OR doouble diagonals
-			x = x_start;
-			y = y_start;
-			z = z_start;
-			while (x != x_end || y != y_end || z != z_end)
-			{
-				if (x < x_end)
-				{
-					x++;
-				}
-				else if (x > x_end)
-				{
-					x--;
-				}
-				if (y < y_end)
-				{
-					y++;
-				}
-				else if (y > y_end)
-				{
-					y--;
-				}
-				if (z < z_end)
-				{
-					z++;
-				}
-				else if (z > z_end)
-				{
-					z--;
-				}
-				if ((points[x + y * 8 + z * 64] != 0 && !(x == x_end && y == y_end && z == z_end)) || points[x + y * 8 + z * 64] < 0)
-				{
-
-					return false;
-				}
-			}
-			return true;
+			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
@@ -783,6 +222,77 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	return false;
 }
 
+bool GameSpace::CanMove(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end, bool is_white)
+{
+	int x = x_start;
+	int y = y_start;
+	int z = z_start;
+	while (x != x_end || y != y_end || z != z_end)
+	{
+		if (x < x_end)
+		{
+			x++;
+		}
+		else if (x > x_end)
+		{
+			x--;
+		}
+		if (y < y_end)
+		{
+			y++;
+		}
+		else if (y > y_end)
+		{
+			y--;
+		}
+		if (z < z_end)
+		{
+			z++;
+		}
+		else if (z > z_end)
+		{
+			z--;
+		}
+		if ((points[x + y * *lenght + z * *lenght * *weight] != 0 && !(x == x_end && y == y_end && z == z_end)) || (points[x + y * *lenght + z * *lenght * *weight] > 0 && is_white) || (points[x + y * *lenght + z * *lenght * *weight] < 0 && !is_white))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool GameSpace::Check(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end, bool to_white)
+{
+	int type_of_figure0 = points[x_start + y_start * *lenght + z_start * *lenght * *weight];
+	int type_of_figure1 = points[x_end + y_end * *lenght + z_end * *lenght * *weight];
+	int type_of_figure_king = -1;
+	if (to_white)
+	{
+		type_of_figure_king = 1;
+	}
+	points[x_start + y_start * *lenght + z_start * *lenght * *weight] = 0;
+	points[x_end + y_end * *lenght + z_end * *lenght * *weight] = type_of_figure1;
+	for (int num_w_king = 0; num_w_king < *lenght * *weight * *height; num_w_king++)
+	{
+		if (points[num_w_king] == type_of_figure_king)
+		{
+			for (int number = 0; number < *lenght * *weight * *height; number++)
+			{
+				if (CanGo(number, num_w_king) && (points[number] < 0 && to_white || points[number] > 0 && !to_white))
+				{
+					points[x_start + y_start * *lenght + z_start * *lenght * *weight] = type_of_figure0;
+					points[x_end + y_end * *lenght + z_end * *lenght * *weight] = type_of_figure1;
+					return false;
+				}
+			}
+			break;
+		}
+	}
+	points[x_start + y_start * *lenght + z_start * *lenght * *weight] = type_of_figure0;
+	points[x_end + y_end * *lenght + z_end * *lenght * *weight] = type_of_figure1;
+	return true;
+}
+
 int GameSpace::GetPoint(int number)
 {
 	return points[number];
@@ -790,7 +300,7 @@ int GameSpace::GetPoint(int number)
 
 int GameSpace::GetPoint(int x, int y, int z)
 {
-	return points[x + y * 8 + z * 64];
+	return points[x + y * *lenght  + z * *lenght * *weight];
 }
 
 bool GameSpace::Mat(bool to_black)
@@ -868,480 +378,199 @@ bool GameSpace::MeetGameRule(int number, int end_number)
 
 bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end)
 {
-	if (x_end > 7 || x_end < 0 || y_end > 7 || y_end < 0 || z_end > 7 || z_end < 0 || x_start > 7 || x_start < 0 || y_start > 7 || y_start < 0 || z_start > 7 || z_start < 0 || (x_start == x_end && y_start == y_end && z_start == z_end))
+	if (x_end > *lenght - 1 || x_end < 0 || y_end > * weight - 1 || y_end < 0 || z_end > *height - 1 || z_end < 0 || x_start > *lenght - 1 || x_start < 0 || y_start > *weight - 1 || y_start < 0 || z_start > *height - 1 || z_start < 0 || (x_start == x_end && y_start == y_end && z_start == z_end))
 	{
 		return false;
 	}
-	else if (*white_move && points[x_start + y_start * 8 + z_start * 64] <= 0 || *black_move && points[x_start + y_start * 8 + z_start * 64] >= 0)
+	else if (*white_move && points[x_start + y_start * *lenght + z_start * *lenght * *weight] <= 0 || *black_move && points[x_start + y_start * *lenght  + z_start * *lenght * *weight] >= 0)
 	{//(in space ) AND ( start != end )
 		return false;
 	}
-	switch (points[x_start + y_start * 8 + z_start * 64])
+	switch (points[x_start + y_start * *lenght  + z_start * *lenght * *weight])
 	{
 	case 1://WHITE king
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int number = 0; number < 512; number++)
+			points[x_start + y_start * *lenght  + z_start * *lenght * *weight] = 0;
+			for (int number = 0; number < *lenght * *weight * *height; number++)
 			{
 				if (points[number] < 0 && CanGo(number, x_end, y_end, z_end))
 				{//no shakh
 					return false;
 				}
 			}
-			points[x_start + y_start * 8 + z_start * 64] = 1;
+			points[x_start + y_start * *lenght  + z_start * *lenght * *weight] = 1;
 			return true;
 		}
 		break;
 	}
 	case 2://WHITE super queen
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] < 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = 2;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
 	case 3://WHITE queen diagonal
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] < 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = 3;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
 	case 4://WHITE queen
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] < 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = 4;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
 	case 5://WHITE bishop diadonal
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] < 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = 5;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
 	case 6://WHIT bishop
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] < 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = 6;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
 	case 7://WHITE knight diagonal
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] < 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = 7;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
 	case 8://WHITE knght
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] < 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = 8;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
 	case 9://WHITE rook
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] < 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = 9;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
 	}
 	case 10://WHITE pawn
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			cout << true << endl;
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
+			if (!Check(x_start, y_start, z_start, x_end, y_end, z_end, true))
 			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] < 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
+				start_points[x_start + y_start * *lenght + z_start * *lenght * *weight] = false;
+				return true;
 			}
-			points[x_start + y_start * 8 + z_start * 64] = 10;
-			return true;
 		}
 		break;
 	}
 	case -1://BLACK king
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int number = 0; number < 512; number++)
+			points[x_start + y_start * *lenght  + z_start * *lenght * *weight] = 0;
+			for (int number = 0; number < *lenght * *weight * *height; number++)
 			{
 				if (points[number] > 0 && CanGo(number, x_end, y_end, z_end))
 				{//no shakh
 					return false;
 				}
 			}
-			points[x_start + y_start * 8 + z_start * 64] = -1;
+			points[x_start + y_start * *lenght  + z_start * *lenght * *weight] = -1;
 			return true;
 		}
 		break;
 	}
 	case -2://BLACK super queen
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == -1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] > 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = -2;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
 	case -3://BLACK queen diagonal
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] > 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = -3;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
 	case -4://BLACK queen
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] > 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = -4;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
 	case -5://BLACK bishop diagonal
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] > 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = -5;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
 	case -6://BLACK bishop
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] > 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = -6;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
 	case -7://BLACK knight diagonal
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] > 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = -7;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
 	case -8://BLACK khight
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] > 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = -8;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
 	case -9://BLACK rook
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
-			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] > 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
-			}
-			points[x_start + y_start * 8 + z_start * 64] = -9;
-			return true;
+			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
 		break;
 	}
 	case -10://BLACK pawn
 	{
-		if (CanGo(x_start + y_start * 8 + z_start * 64, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * 8 + z_start * 64] = 0;
-			for (int num_w_king = 0; num_w_king < 512; num_w_king++)
+			if (!Check(x_start, y_start, z_start, x_end, y_end, z_end, false))
 			{
-				if (points[num_w_king] == 1)
-				{
-					for (int number = 0; number < 512; number++)
-					{
-						if (CanGo(number, num_w_king % 8, (num_w_king / 8) % 8, (num_w_king / 64) % 8) && points[number] > 0)
-						{//no shakh
-							return false;
-						}
-					}
-					break;
-				}
+				start_points[x_start + y_start * *lenght + z_start * *lenght * *weight] = false;
+				return true;
 			}
-			points[x_start + y_start * 8 + z_start * 64] = -10;
-			return true;
 		}
 		break;
 	}
@@ -1363,8 +592,8 @@ void GameSpace::ReplasePoints(int number1, int number2)
 void GameSpace::ReplasePoints(int x1, int y1, int z1, int number2)
 {
 	int* point = new int;
-	*point = points[x1 + y1 * 8 + z1 * 64];
-	points[x1 + y1 * 8 + z1 * 64] = points[number2];
+	*point = points[x1 + y1 * *lenght  + z1 * *lenght * *weight];
+	points[x1 + y1 * *lenght  + z1 * *lenght * *weight] = points[number2];
 	points[number2] = *point;
 	delete point;
 }
@@ -1372,9 +601,9 @@ void GameSpace::ReplasePoints(int x1, int y1, int z1, int number2)
 void GameSpace::ReplasePoints(int x1, int y1, int z1, int x2, int y2, int z2)
 {
 	int* point = new int;
-	*point = points[x1 + y1 * 8 + z1 * 64];
-	points[x1 + y1 * 8 + z1 * 64] = points[x2 + y2 * 8 + z2 * 64];
-	points[x2 + y2 * 8 + z2 * 64] = *point;
+	*point = points[x1 + y1 * *lenght  + z1 * *lenght * *weight];
+	points[x1 + y1 * *lenght  + z1 * *lenght * *weight] = points[x2 + y2 * *lenght  + z2 * *lenght * *weight];
+	points[x2 + y2 * *lenght  + z2 * *lenght * *weight] = *point;
 	delete point;
 }
 
@@ -1385,7 +614,7 @@ void GameSpace::SetPoint(int number, int number_of_figure)
 
 void GameSpace::SetPoint(int x, int y, int z, int number_of_figure)
 {
-	points[x + y * 8 + z * 64] = number_of_figure;
+	points[x + y * *lenght  + z * *lenght * *weight] = number_of_figure;
 }
 
 void GameSpace::Show(int plane_z)
@@ -1397,17 +626,17 @@ void GameSpace::Show(int plane_z)
 		{
 			for (int y = 0; y < *weight; y++)
 			{
-				if ((points[x + y * 8 + plane_z * 64] < 0 && points[x + y * 8 + plane_z * 64] > -10) || points[x + y * 8 + plane_z * 64] > 9)
+				if ((points[x + y * *lenght  + plane_z * *lenght * *weight] < 0 && points[x + y * *lenght  + plane_z * *lenght * *weight] > -10) || points[x + y * *lenght  + plane_z * *lenght * *weight] > 9)
 				{
-					cout << " " << points[x + y * 8 + plane_z * 64] << " ";
+					cout << " " << points[x + y * *lenght  + plane_z * *lenght * *weight] << " ";
 				}
-				else if (points[x + y * 8 + plane_z * 64] < -9)
+				else if (points[x + y * *lenght  + plane_z * *lenght * *weight] < -9)
 				{
-					cout << points[x + y * 8 + plane_z * 64] << " ";
+					cout << points[x + y * *lenght  + plane_z * *lenght * *weight] << " ";
 				}
 				else
 				{
-					cout << "  " << points[x + y * 8 + plane_z * 64] << " ";
+					cout << "  " << points[x + y * *lenght  + plane_z * *lenght * *weight] << " ";
 				}
 			}
 			cout << endl << endl;
@@ -1417,7 +646,7 @@ void GameSpace::Show(int plane_z)
 
 void GameSpace::ShowAll()
 {
-	for (int z = 0; z < 8; z++)
+	for (int z = 0; z < *height; z++)
 	{
 		Show(z);
 		cout << endl << "-------------------------------" << endl << endl;
