@@ -12,7 +12,6 @@ List::List(int type_of_game)
 		*lenght = 8;
 		*weight = 8;
 		*height = 8;
-		//entities = new int[*lenght * *weight * *height];
 		/*
 		0 - void
 		WHITE
