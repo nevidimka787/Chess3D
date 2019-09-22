@@ -1,10 +1,15 @@
 #pragma once
+
+#include"List.h"
+
 class GameSpace
 {
 public:
-	GameSpace(int type_of_game);//Start game with started parameter.
+	GameSpace(List list);//Start game with started parameter.
 	bool CanGo(int number, int end_number);//Figure can go from start positon on line to second position on line.
 	bool CanGo(int number, int x_end, int y_end, int z_end);//Figure can go from start positon to second position on line.
+	bool CanMove(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end, bool is_white);//Figure can go from start position to end position ignore game rules.
+	bool Check(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end, bool to_white);//Check weel be after move.
 	int GetPoint(int number);//Take information about indicated position on line.
 	int GetPoint(int x, int y, int z);//Take information about indicated position.
 	bool Mat(bool to_black);//If parametr "to_black" is false, function verify mat to white party.
