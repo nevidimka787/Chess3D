@@ -21,10 +21,6 @@ GameSpace::GameSpace(List list)
 			start_points[n] = true;
 		}
 	}
-	for (int n = 0; n < *lenght * *weight * *height / 4; n += 4)
-	{
-		cout << start_points[n] << '	' << n << '	' << start_points[n + 1] << '	' << n + 1 << '	' << start_points[n + 2] << '	' << n + 2 << '	' << start_points[n + 3] << '	' << n + 3 << endl;
-	}
 }
 
 bool GameSpace::CanGo(int number, int end_number)
