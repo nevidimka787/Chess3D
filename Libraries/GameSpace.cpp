@@ -9,7 +9,6 @@ GameSpace::GameSpace(List list)
 	*lenght = list.GetElement(0);
 	*weight = list.GetElement(1);
 	*height = list.GetElement(2);
-	//int *points = new int[*lenght * *weight * *height];
 	for (int n = 0; n < *lenght * *weight * *height; n++)
 	{
 		points[n] = list.Get(n);
@@ -22,6 +21,10 @@ GameSpace::GameSpace(List list)
 			start_points[n] = true;
 		}
 	}
+	for (int n = 0; n < *lenght * *weight * *height / 4; n += 4)
+	{
+		cout << start_points[n] << '	' << n << '	' << start_points[n + 1] << '	' << n + 1 << '	' << start_points[n + 2] << '	' << n + 2 << '	' << start_points[n + 3] << '	' << n + 3 << endl;
+	}
 }
 
 bool GameSpace::CanGo(int number, int end_number)
@@ -32,7 +35,7 @@ bool GameSpace::CanGo(int number, int end_number)
 bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 {
 
-	int x_start = number % *lenght , y_start = (number / *lenght ) % *weight, z_start = (number / *lenght * *weight) % *height;
+	int x_start = number % *lenght , y_start = (number / *lenght ) % *weight, z_start = (number / (*lenght * *weight)) % *height;
 	switch (points[number])
 	{
 	case 1://WHITE king
@@ -117,7 +120,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case 10://WHITE pawn
 	{
-		if (x_start - x_end == -1 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == -2 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] < 0))
+		if (x_start - x_end == -1 && y_start == y_end && z_start == z_end || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == -2 && y_start == y_end && z_start == z_end || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] < 0))
 		{// can go only forvard OR eat figures on diagonals OR doouble diagonals
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -189,7 +192,6 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case -8://BLACK knight
 	{
-		cout << x_start - x_end << endl << y_start - y_end << endl << z_start - z_end << endl;
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 2 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 0 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 0 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2 || abs(x_start - x_end) == 0 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1)
 		{//it is knight diagonal
 			if (points[x_end + y_end * *lenght + z_end * *lenght * *weight] >= 0)
@@ -210,7 +212,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case -10://BLACK pawn
 	{
-		if (x_start - x_end == 1 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == 2 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] > 0))
+		if (x_start - x_end == 1 && y_start == y_end && z_start == z_end || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == 2 && y_start == y_end && z_start == z_end || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] > 0))
 		{// can go only forvard OR eat figures on diagonals OR doouble diagonals
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -282,7 +284,7 @@ bool GameSpace::Check(int x_start, int y_start, int z_start, int x_end, int y_en
 				{
 					points[x_start + y_start * *lenght + z_start * *lenght * *weight] = type_of_figure0;
 					points[x_end + y_end * *lenght + z_end * *lenght * *weight] = type_of_figure1;
-					return false;
+					return true;
 				}
 			}
 			break;
@@ -290,7 +292,7 @@ bool GameSpace::Check(int x_start, int y_start, int z_start, int x_end, int y_en
 	}
 	points[x_start + y_start * *lenght + z_start * *lenght * *weight] = type_of_figure0;
 	points[x_end + y_end * *lenght + z_end * *lenght * *weight] = type_of_figure1;
-	return true;
+	return false;
 }
 
 int GameSpace::GetPoint(int number)
@@ -373,17 +375,22 @@ void GameSpace::MoveBlack()//white_move = false; black_move = true
 
 bool GameSpace::MeetGameRule(int number, int end_number)
 {
-	return MeetGameRule(number % *lenght, (end_number / *weight) % *lenght, (end_number / *weight / *height) % *lenght, end_number % *lenght, (end_number / *weight) % *lenght, (end_number / *weight / *height) % *lenght);
+	return MeetGameRule(number % *lenght, (end_number / *lenght) % *weight, (end_number / (*lenght * *weight)) % *height, end_number % *lenght, (end_number / *lenght) % *weight, (end_number / (*lenght * *weight)) % *height);
+}
+
+bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int end_number)
+{
+	return MeetGameRule(x_start, y_start, z_start, end_number % *lenght, (end_number / *lenght) % *weight, (end_number / (*lenght * *weight)) % *height);
 }
 
 bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end)
 {
-	if (x_end > *lenght - 1 || x_end < 0 || y_end > * weight - 1 || y_end < 0 || z_end > *height - 1 || z_end < 0 || x_start > *lenght - 1 || x_start < 0 || y_start > *weight - 1 || y_start < 0 || z_start > *height - 1 || z_start < 0 || (x_start == x_end && y_start == y_end && z_start == z_end))
-	{
+	if (x_end > *lenght - 1 || x_end < 0 || y_end > *weight - 1 || y_end < 0 || z_end > *height - 1 || z_end < 0 || x_start > *lenght - 1 || x_start < 0 || y_start > *weight - 1 || y_start < 0 || z_start > *height - 1 || z_start < 0 || (x_start == x_end && y_start == y_end && z_start == z_end))
+	{//(in space ) AND ( start != end )
 		return false;
 	}
 	else if (*white_move && points[x_start + y_start * *lenght + z_start * *lenght * *weight] <= 0 || *black_move && points[x_start + y_start * *lenght  + z_start * *lenght * *weight] >= 0)
-	{//(in space ) AND ( start != end )
+	{
 		return false;
 	}
 	switch (points[x_start + y_start * *lenght  + z_start * *lenght * *weight])
@@ -457,6 +464,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	{
 		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
+			bool b = Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
@@ -475,7 +483,6 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 		{
 			if (!Check(x_start, y_start, z_start, x_end, y_end, z_end, true))
 			{
-				start_points[x_start + y_start * *lenght + z_start * *lenght * *weight] = false;
 				return true;
 			}
 		}
@@ -568,7 +575,6 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 		{
 			if (!Check(x_start, y_start, z_start, x_end, y_end, z_end, false))
 			{
-				start_points[x_start + y_start * *lenght + z_start * *lenght * *weight] = false;
 				return true;
 			}
 		}
@@ -617,10 +623,11 @@ void GameSpace::SetPoint(int x, int y, int z, int number_of_figure)
 	points[x + y * *lenght  + z * *lenght * *weight] = number_of_figure;
 }
 
-void GameSpace::Show(int plane_z)
+void GameSpace::Show(int plane_z, bool show_cordinats_vectors)
 {
 	if (plane_z < *height)
 	{
+		int string_number = 0;
 		cout << endl;
 		for (int x = 0; x < *lenght; x++)
 		{
@@ -639,6 +646,42 @@ void GameSpace::Show(int plane_z)
 					cout << "  " << points[x + y * *lenght  + plane_z * *lenght * *weight] << " ";
 				}
 			}
+			if (show_cordinats_vectors)
+			{
+				switch (string_number)
+				{
+				case 0:
+				{
+					cout << "   Z = " << plane_z;
+					break;
+				}
+				case 2:
+				{
+					cout << "   +  -  >  Y";
+					break;
+				}
+				case 3:
+				{
+					cout << "   |";
+					break;
+				}
+				case 4:
+				{
+					cout << "   v";
+					break;
+				}
+				case 5:
+				{
+					cout << "   X";
+					break;
+				}
+				default:
+				{
+					break;
+				}
+				}
+				string_number++;
+			}
 			cout << endl << endl;
 		}
 	}
@@ -648,7 +691,7 @@ void GameSpace::ShowAll()
 {
 	for (int z = 0; z < *height; z++)
 	{
-		Show(z);
+		Show(z, true);
 		cout << endl << "-------------------------------" << endl << endl;
 	}
 }
@@ -665,10 +708,10 @@ void GameSpace::ShowInformation()
 			"2 - Super Queen" << endl <<
 			"3 - Queen diagonale" << endl <<
 			"4 - Queen" << endl <<
-			"5 - Super Bishop" << endl <<
+			"5 - Bishop Diagonal" << endl <<
 			"6 - Bishop" << endl <<
-			"7 - Super Knigaht" << endl <<
-			"8 - Knigaht" << endl <<
+			"7 - Knight Diagonal" << endl <<
+			"8 - Knight" << endl <<
 			"9 - Rook" << endl <<
 			"10 - Pawn" << endl << endl <<
 			"BLACK" << endl <<
@@ -676,10 +719,10 @@ void GameSpace::ShowInformation()
 			"-2 - Super Queen" << endl <<
 			"-3 - Queen diagonale" << endl <<
 			"-4 - Queen" << endl <<
-			"-5 - Super Bishop" << endl <<
+			"-5 - Bishop Diagonal" << endl <<
 			"-6 - Bishop" << endl <<
-			"-7 - Super Knigaht" << endl <<
-			"-8 - Knigaht" << endl <<
+			"-7 - Knight Diagonal" << endl <<
+			"-8 - Knight" << endl <<
 			"-9 - Rook" << endl <<
 			"-10 - Pawn" << endl;
 	}
