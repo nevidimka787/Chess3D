@@ -116,7 +116,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case 10://WHITE pawn
 	{
-		if (x_start - x_end == -1 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == -2 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] < 0))
+		if (x_start - x_end == -1 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == -2 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || (x_start - x_end == 1 && (abs(y_start - y_end) == -1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] < 0))
 		{// can go only forvard OR eat figures on diagonals OR doouble diagonals
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -304,63 +304,33 @@ int GameSpace::GetPoint(int x, int y, int z)
 bool GameSpace::Mat(bool to_black)
 {
 	int king_number = 0;
-	bool mat = false;
 	if (to_black)//If mat is to black.
 	{
-		for (int number = 0; number < *lenght * *weight * *height; number++)
+		for (int start_position = 0; start_position < *lenght * *weight * *height; start_position++)
 		{
-			if (points[number] == -1)
+			for (int end_position = 0; end_position < *lenght * *weight * *height; end_position++)
 			{
-				king_number = number;
-			}
-		}
-		for (int number = 0; number < *lenght * *weight * *height; number++)
-		{
-			if (points[number] > 0 && CanGo(number, king_number))
-			{
-				mat = true;
-			}
-		}
-		for (int number = 0; number < *lenght * *weight * *height; number++)
-		{
-			for (int end_number = 0; end_number < *lenght * *weight * *height; end_number++)
-			{
-				if (MeetGameRule(points[king_number], number) || points[number] < 0 && MeetGameRule(number, end_number))
+				if (points[start_position] < 0 && MeetGameRule(start_position, end_position))
 				{
-					mat = false;
+					return false;
 				}
 			}
 		}
 	}
 	else//If mat is to white.
 	{
-		for (int number = 0; number < *lenght * *weight * *height; number++)
+		for (int start_position = 0; start_position < *lenght * *weight * *height; start_position++)
 		{
-			if (points[number] == 1)
+			for (int end_position = 0; end_position < *lenght * *weight * *height; end_position++)
 			{
-				king_number = number;
-				break;
-			}
-		}
-		for (int number = 0; number < *lenght * *weight * *height; number++)
-		{
-			if (points[number] < 0 && CanGo(number, king_number))
-			{
-				mat = true;
-			}
-		}
-		for (int number = 0; number < *lenght * *weight * *height; number++)
-		{
-			for (int end_number = 0; end_number < *lenght * *weight * *height; end_number++)
-			{
-				if (MeetGameRule(points[king_number], number) || points[number] > 0 && MeetGameRule(number, end_number))
+				if (points[start_position] > 0 && MeetGameRule(start_position, end_position))
 				{
-					mat = false;
+					return false;
 				}
 			}
 		}
 	}
-	return mat;
+	return true;
 }
 
 void GameSpace::MoveWhite()//white_move = true; black_move = false
