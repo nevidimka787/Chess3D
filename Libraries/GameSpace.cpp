@@ -460,7 +460,6 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	{
 		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			bool b = Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
 		break;
