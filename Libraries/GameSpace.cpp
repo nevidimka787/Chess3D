@@ -108,7 +108,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case 9://WHITE rook
 	{
-		if (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end))
+		if (x_start == x_end && y_start == y_end || y_start == y_end && z_start == z_end || z_start == z_end && x_start == x_end)
 		{
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -200,7 +200,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case -9://BLACK rook
 	{
-		if (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end))
+		if (x_start == x_end && y_start == y_end || y_start == y_end && z_start == z_end || z_start == z_end && x_start == x_end)
 		{
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -323,9 +323,12 @@ bool GameSpace::Mat(bool to_black)
 		}
 		for (int number = 0; number < *lenght * *weight * *height; number++)
 		{
-			if (MeetGameRule(points[king_number], number))
+			for (int end_number = 0; end_number < *lenght * *weight * *height; end_number++)
 			{
-				mat = false;
+				if (MeetGameRule(points[king_number], number) || points[number] < 0 && MeetGameRule(number, end_number))
+				{
+					mat = false;
+				}
 			}
 		}
 	}
@@ -348,9 +351,12 @@ bool GameSpace::Mat(bool to_black)
 		}
 		for (int number = 0; number < *lenght * *weight * *height; number++)
 		{
-			if (MeetGameRule(points[king_number], number))
+			for (int end_number = 0; end_number < *lenght * *weight * *height; end_number++)
 			{
-				mat = false;
+				if (MeetGameRule(points[king_number], number) || points[number] > 0 && MeetGameRule(number, end_number))
+				{
+					mat = false;
+				}
 			}
 		}
 	}
