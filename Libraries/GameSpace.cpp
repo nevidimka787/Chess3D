@@ -44,7 +44,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case 2://WHITE super queen
 	{
-		if (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end || x_start == x_end || y_start == y_end || z_start == z_end))
+		if (abs(x_start - x_end) == abs(y_start - y_end) && abs(y_start - y_end) == abs(z_start - z_end) || abs(x_start - x_end) == abs(y_start - y_end) && z_start == z_end || abs(y_start - y_end) == abs(z_start - z_end) && x_start == x_end || abs(z_start - z_end) == abs(x_start - x_end) && y_start == y_end || x_start == x_end && y_start == y_end || y_start == y_end && z_start == z_end || z_start == z_end && x_start == x_end)
 		{//can go on all points in all sides
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -116,7 +116,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case 10://WHITE pawn
 	{
-		if (x_start - x_end == -1 && y_start == y_end && z_start == z_end || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == -2 && y_start == y_end && z_start == z_end || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] < 0))
+		if (x_start - x_end == -1 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == -2 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] < 0))
 		{// can go only forvard OR eat figures on diagonals OR doouble diagonals
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -133,7 +133,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	case -2://BLACK super queen
 	{
 
-		if (abs(x_start - x_end) == abs(y_start - y_end) || abs(y_start - y_end) == abs(z_start - z_end) || abs(z_start - z_end) == abs(x_start - x_end || x_start == x_end || y_start == y_end || z_start == z_end))
+		if (abs(x_start - x_end) == abs(y_start - y_end) && abs(y_start - y_end) == abs(z_start - z_end) || abs(x_start - x_end) == abs(y_start - y_end) && z_start == z_end || abs(y_start - y_end) == abs(z_start - z_end) && x_start == x_end || abs(z_start - z_end) == abs(x_start - x_end) && y_start == y_end || x_start == x_end && y_start == y_end || y_start == y_end && z_start == z_end || z_start == z_end && x_start == x_end)
 		{//can go on all points in all sides
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -208,7 +208,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case -10://BLACK pawn
 	{
-		if (x_start - x_end == 1 && y_start == y_end && z_start == z_end || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == 2 && y_start == y_end && z_start == z_end || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] > 0))
+		if (x_start - x_end == 1 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == 2 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] > 0))
 		{// can go only forvard OR eat figures on diagonals OR doouble diagonals
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
