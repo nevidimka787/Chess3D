@@ -1,0 +1,181 @@
+#include <iostream>
+#include <GL/glut.h>
+
+//int wight = 600, hight = 600;
+
+float red = 1.0f, blue = 1.0f, green = 1.0f, alpha = 0.1f;
+
+float angle_xz = 0.0, angle_xy = 0.0;// угол поворота камеры
+
+float lx = 0.0f, ly = 0.0f, lz = -1.0f;// координаты вектора направления движения камеры
+
+float dx = 0.0f, dy = 0.1f, dz = 0.0f;// смещения по осям
+
+float x = 0.0f, y = 0.0f, z = 5.0f;// XZ позиция камеры
+
+
+void draw_cube()
+{
+	glColor3f(0.9f, 0.6f, 0.5f);//Установка цвета фигуры.
+
+	glutSolidCube(1.0f);
+}
+
+void draw_polidon()
+{
+	glColor3f(0.9f, 0.9f, 0.9f);//Установка цвета фигуры.
+
+	glBegin(GL_QUADS); // полигон с коондинатами
+	glVertex3f(-100.0f, -4.0f, -100.0f);
+	glVertex3f(-100.0f, -4.0f, 100.0f);
+	glVertex3f(100.0f, -4.0f, 100.0f);
+	glVertex3f(100.0f, -4.0f, -100.0f);
+}
+
+void render_Scene()
+{
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glLoadIdentity();// обнуление трансформации
+		
+		gluLookAt(x, y, z,
+			x + lx, y + ly, z + lz,
+			0.0f, 1.0f, 0.0f);// установка камеры
+
+		draw_polidon();
+
+		for (int x_pos = 0; x_pos < 8; x_pos++)
+		{
+			for (int y_pos = 0; y_pos < 8; y_pos++)
+			{
+				for (int z_pos = 0; z_pos < 8; z_pos++)
+				{
+					glPushMatrix();
+					glTranslatef(x_pos * 5.0, z_pos * 5.0, y_pos * 5.0);
+					draw_cube();
+					glPopMatrix();
+				}
+			}
+		}
+
+		glutSwapBuffers();
+
+}
+
+void changeSize(int w, int h)
+{
+
+	// предупредим деление на ноль
+	// если окно сильно перетянуто будет
+	if (h == 0)
+	{
+		h = 1;
+	}
+
+	float ratio = 1.0 * w / h;
+
+	// используем матрицу проекции
+	glMatrixMode(GL_PROJECTION);
+
+	// Reset матрицы
+	glLoadIdentity();
+
+	// определяем окно просмотра
+	glViewport(0, 0, w, h);
+
+	// установить корректную перспективу.
+	gluPerspective(60, ratio, 1, 1000);
+
+	// вернуться к модели
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void processSpecialKeys(int key, int xx, int yy)
+{
+	switch (key)
+	{
+	case GLUT_KEY_LEFT:
+		angle_xz -= 0.1f;
+		lx = sin(angle_xz) * cos(angle_xy);
+		ly = sin(angle_xy);
+		lz = -cos(angle_xz) * cos(angle_xy);
+		dx = sin(angle_xz);
+		dz = -cos(angle_xz);
+		break;
+	case GLUT_KEY_RIGHT:
+		angle_xz += 0.1f;
+		lx = sin(angle_xz) * cos(angle_xy);
+		ly = sin(angle_xy);
+		lz = -cos(angle_xz) * cos(angle_xy);
+		dx = sin(angle_xz);
+		dz = -cos(angle_xz);
+		break;
+	case GLUT_KEY_UP:
+		angle_xy += 0.1f;
+		lx = sin(angle_xz) * cos(angle_xy);
+		ly = sin(angle_xy);
+		lz = -cos(angle_xz) * cos(angle_xy);
+		break;
+	case GLUT_KEY_DOWN:
+		angle_xy -= 0.1f;
+		lx = sin(angle_xz) * cos(angle_xy);
+		ly = sin(angle_xy);
+		lz = -cos(angle_xz) * cos(angle_xy);
+		break;
+	}
+}
+
+void processNormalKeys(unsigned char key, int xx, int yy)
+{
+	float fraction = 0.1f;
+
+	switch (key)
+	{
+	case 'a':
+		x += dz * fraction;
+		z -= dx * fraction;
+		break;
+	case 'd':
+		x -= dz * fraction;
+		z += dx * fraction;
+		break;
+	case 'e':
+		y += dy;
+		break;
+	case 'q':
+		y -= dy;
+		break;
+	case 's':
+		x -= dx * fraction;
+		z -= dz * fraction;
+		break;
+	case 'w':
+		x += dx * fraction;
+		z += dz * fraction;
+		break;
+	case 27:
+		exit(0);
+		break;
+	}
+}
+
+int main(int argc, char **argv)//* int argc - количество аргументов | char** argv - их описание в виде указателя на строку
+{
+	glutInit(&argc, argv);
+	glutInitWindowPosition(400, 100);
+	glutInitWindowSize(800, 800);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+	glutCreateWindow("Hellow GL!");
+
+	glutReshapeFunc(changeSize);//регистрирует для GLUT функцию обратного вызова
+
+	glutIdleFunc(render_Scene);//регистрирует функцию обратного вызова, которая будет вызываться когда само приложение находится в режиме ожидания
+
+	glutDisplayFunc(render_Scene);
+
+	glutKeyboardFunc(processNormalKeys);
+
+	glutSpecialFunc(processSpecialKeys);
+
+	glutMainLoop();
+}
