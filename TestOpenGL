@@ -1,78 +1,190 @@
 #include <iostream>
 #include <GL/glut.h>
 
-//int wight = 600, hight = 600;
+int wight = 1000, hight = 800;
+
+short move_x = 0, move_y = 0, move_z = 0;//возможность перемещения по оси -1 - REVERS; 0 - STOP; 1 - FORVARD
 
 float red = 1.0f, blue = 1.0f, green = 1.0f, alpha = 0.1f;
 
-float angle_xz = 0.0, angle_xy = 0.0;// угол поворота камеры
+float angle_xz = -3.86, angle_xy = -0.55, d_angle_xz = 0, d_angle_xy = 0;// угол поворота камеры
 
-float lx = 0.0f, ly = 0.0f, lz = -1.0f;// координаты вектора направления движения камеры
+float mouse_x_position_last = NULL, mouse_y_position_last = NULL;// значение предыдущей позиции мыши
 
-float dx = 0.0f, dy = 0.1f, dz = 0.0f;// смещения по осям
+float lx = sin(angle_xz) * cos(angle_xy), ly = sin(angle_xy), lz = -cos(angle_xz) * cos(angle_xy);// координаты вектора направления движения камеры
 
-float x = 0.0f, y = 0.0f, z = 5.0f;// XZ позиция камеры
+float dx = 0.0f, dy = 0.0f, dz = 0.0f;// смещения по осям
 
+float x = -20.0f, y = 9.0f, z = -20.0f;// XZ позиция камеры
+
+float camera_speed = 0.2f, mouse_modification = 0.001f;// скорость 
+
+bool forvard_backvard = true;
+
+bool bottoms[100];
+bool mouse_motion = false;
+
+
+void draw_cube(double x_position, double y_position, double z_position, double rang)
+{
+	glBegin(GL_TRIANGLES);
+
+	glColor4f(0.9f, 0.6f, 0.3f, 0.5f);
+
+	glVertex3f(x_position + rang, y_position + rang, z_position + rang);
+	glVertex3f(x_position - rang, y_position + rang, z_position + rang);
+	glVertex3f(x_position + rang, y_position - rang, z_position + rang);
+
+	glVertex3f(x_position - rang, y_position + rang, z_position + rang);
+	glVertex3f(x_position + rang, y_position - rang, z_position + rang);
+	glVertex3f(x_position - rang, y_position - rang, z_position + rang);
+
+	glColor4f(0.9f, 0.3f, 0.6f, 0.5f);
+
+	glVertex3f(x_position + rang, y_position + rang, z_position - rang);
+	glVertex3f(x_position - rang, y_position + rang, z_position - rang);
+	glVertex3f(x_position + rang, y_position - rang, z_position - rang);
+
+	glVertex3f(x_position - rang, y_position + rang, z_position - rang);
+	glVertex3f(x_position + rang, y_position - rang, z_position - rang);
+	glVertex3f(x_position - rang, y_position - rang, z_position - rang);
+
+	glColor4f(0.6f, 0.9f, 0.3f, 0.5f);
+
+	glVertex3f(x_position + rang, y_position + rang, z_position + rang);
+	glVertex3f(x_position - rang, y_position + rang, z_position + rang);
+	glVertex3f(x_position + rang, y_position + rang, z_position - rang);
+
+	glVertex3f(x_position - rang, y_position + rang, z_position + rang);
+	glVertex3f(x_position + rang, y_position + rang, z_position - rang);
+	glVertex3f(x_position - rang, y_position + rang, z_position - rang);
+
+	glColor4f(0.6f, 0.3f, 0.9f, 0.5f);
+
+	glVertex3f(x_position + rang, y_position - rang, z_position + rang);
+	glVertex3f(x_position - rang, y_position - rang, z_position + rang);
+	glVertex3f(x_position + rang, y_position - rang, z_position - rang);
+
+	glVertex3f(x_position - rang, y_position - rang, z_position + rang);
+	glVertex3f(x_position + rang, y_position - rang, z_position - rang);
+	glVertex3f(x_position - rang, y_position - rang, z_position - rang);
+
+	glColor4f(0.3f, 0.9f, 0.6f, 0.5f);
+
+	glVertex3f(x_position + rang, y_position + rang, z_position + rang);
+	glVertex3f(x_position + rang, y_position - rang, z_position + rang);
+	glVertex3f(x_position + rang, y_position + rang, z_position - rang);
+
+	glVertex3f(x_position + rang, y_position - rang, z_position + rang);
+	glVertex3f(x_position + rang, y_position + rang, z_position - rang);
+	glVertex3f(x_position + rang, y_position - rang, z_position - rang);
+
+	glColor4f(0.3f, 0.6f, 0.9f, 0.5f);
+
+	glVertex3f(x_position - rang, y_position + rang, z_position + rang);
+	glVertex3f(x_position - rang, y_position - rang, z_position + rang);
+	glVertex3f(x_position - rang, y_position + rang, z_position - rang);
+
+	glVertex3f(x_position - rang, y_position - rang, z_position + rang);
+	glVertex3f(x_position - rang, y_position + rang, z_position - rang);
+	glVertex3f(x_position - rang, y_position - rang, z_position - rang);
+	glEnd();
+}
 
 void draw_cube()
 {
-	glColor3f(0.9f, 0.6f, 0.5f);//Установка цвета фигуры.
-
 	glutSolidCube(1.0f);
 }
 
-void draw_polidon()
+void draw_poligon()
 {
 	glColor3f(0.9f, 0.9f, 0.9f);//Установка цвета фигуры.
 
-	glBegin(GL_QUADS); // полигон с коондинатами
+	glBegin(GL_TRIANGLES); // полигон с коондинатами
 	glVertex3f(-100.0f, -4.0f, -100.0f);
 	glVertex3f(-100.0f, -4.0f, 100.0f);
 	glVertex3f(100.0f, -4.0f, 100.0f);
+
+	glVertex3f(-100.0f, -4.0f, -100.0f);
 	glVertex3f(100.0f, -4.0f, -100.0f);
+	glVertex3f(100.0f, -4.0f, 100.0f);
+}
+
+void recalculate_camera()
+{
+	angle_xy += d_angle_xy;
+	angle_xz += d_angle_xz;
+	lx = sin(angle_xz) * cos(angle_xy);
+	ly = sin(angle_xy);
+	lz = -cos(angle_xz) * cos(angle_xy);
+	y += camera_speed * move_y;
+	if (forvard_backvard)
+	{
+		x += sin(angle_xz) * camera_speed * move_x;
+		z += -cos(angle_xz) * camera_speed * move_z;
+	}
+	else
+	{
+		x += cos(angle_xz) * camera_speed * move_x;
+		z += -sin(angle_xz) * camera_speed * move_z;
+	}
+
+}
+
+void render_camera()
+{
+	recalculate_camera();
+	gluLookAt(x, y, z,
+		x + lx, y + ly, z + lz,
+		0.0f, 1.0f, 0.0f);// установка камеры
 }
 
 void render_Scene()
 {
-		glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.4, 0.4, 1.0, 1.0);// цвет фонa
 
-		glLoadIdentity();// обнуление трансформации
-		
-		gluLookAt(x, y, z,
-			x + lx, y + ly, z + lz,
-			0.0f, 1.0f, 0.0f);// установка камеры
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		draw_polidon();
+	glEnable(GL_DEPTH_TEST);
 
-		for (int x_pos = 0; x_pos < 8; x_pos++)
+	glLoadIdentity();// обнуление трансформации
+
+	render_camera();
+
+	draw_poligon();
+
+
+	for (int x_pos = 0; x_pos < 8; x_pos++)
+	{
+		for (int y_pos = 0; y_pos < 8; y_pos++)
 		{
-			for (int y_pos = 0; y_pos < 8; y_pos++)
+			for (int z_pos = 0; z_pos < 8; z_pos++)
 			{
-				for (int z_pos = 0; z_pos < 8; z_pos++)
-				{
-					glPushMatrix();
-					glTranslatef(x_pos * 5.0, z_pos * 5.0, y_pos * 5.0);
-					draw_cube();
-					glPopMatrix();
-				}
+				draw_cube(x_pos * 5, y_pos * 5, z_pos * 5, 1);
 			}
 		}
+	}
 
-		glutSwapBuffers();
-
+	glutSwapBuffers();
+	if (!mouse_motion)
+	{
+		d_angle_xy = 0;
+		d_angle_xz = 0;
+	}
+	mouse_motion = false;
 }
 
-void changeSize(int w, int h)
+void changeSize(int window_wight, int window_hight)
 {
 
 	// предупредим деление на ноль
 	// если окно сильно перетянуто будет
-	if (h == 0)
+	if (window_hight == 0)
 	{
-		h = 1;
+		window_hight = 1;
 	}
 
-	float ratio = 1.0 * w / h;
+	float ratio = 1.0 * window_wight / window_hight;
 
 	// используем матрицу проекции
 	glMatrixMode(GL_PROJECTION);
@@ -81,7 +193,7 @@ void changeSize(int w, int h)
 	glLoadIdentity();
 
 	// определяем окно просмотра
-	glViewport(0, 0, w, h);
+	glViewport(0, 0, window_wight, window_hight);
 
 	// установить корректную перспективу.
 	gluPerspective(60, ratio, 1, 1000);
@@ -90,68 +202,49 @@ void changeSize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void processSpecialKeys(int key, int xx, int yy)
+void press_special_key(int key, int mouse_x_position, int mouse_y_position)
 {
-	switch (key)
-	{
-	case GLUT_KEY_LEFT:
-		angle_xz -= 0.1f;
-		lx = sin(angle_xz) * cos(angle_xy);
-		ly = sin(angle_xy);
-		lz = -cos(angle_xz) * cos(angle_xy);
-		dx = sin(angle_xz);
-		dz = -cos(angle_xz);
-		break;
-	case GLUT_KEY_RIGHT:
-		angle_xz += 0.1f;
-		lx = sin(angle_xz) * cos(angle_xy);
-		ly = sin(angle_xy);
-		lz = -cos(angle_xz) * cos(angle_xy);
-		dx = sin(angle_xz);
-		dz = -cos(angle_xz);
-		break;
-	case GLUT_KEY_UP:
-		angle_xy += 0.1f;
-		lx = sin(angle_xz) * cos(angle_xy);
-		ly = sin(angle_xy);
-		lz = -cos(angle_xz) * cos(angle_xy);
-		break;
-	case GLUT_KEY_DOWN:
-		angle_xy -= 0.1f;
-		lx = sin(angle_xz) * cos(angle_xy);
-		ly = sin(angle_xy);
-		lz = -cos(angle_xz) * cos(angle_xy);
-		break;
-	}
 }
 
-void processNormalKeys(unsigned char key, int xx, int yy)
+void press_up_special_key(int key, int mouse_x_position, int mouse_y_position)
 {
-	float fraction = 0.1f;
+	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
+}
 
+void press_normal_key(unsigned char key, int mouse_x_position, int mouse_y_position)
+{
+	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 	switch (key)
 	{
 	case 'a':
-		x += dz * fraction;
-		z -= dx * fraction;
+		forvard_backvard = false;
+		move_x = -1;
+		move_z = 1;
 		break;
 	case 'd':
-		x -= dz * fraction;
-		z += dx * fraction;
+		forvard_backvard = false;
+		move_x = 1;
+		move_z = -1;
 		break;
 	case 'e':
-		y += dy;
+		move_y = 1;
 		break;
 	case 'q':
-		y -= dy;
+		move_y = -1;
 		break;
 	case 's':
-		x -= dx * fraction;
-		z -= dz * fraction;
+		forvard_backvard = true;
+		move_x = -1;
+		move_z = -1;
 		break;
 	case 'w':
-		x += dx * fraction;
-		z += dz * fraction;
+		forvard_backvard = true;
+		move_x = 1;
+		move_z = 1;
+		break;
+	case 'x':
+		std::cout << "x = " << x << '	' << "y = " << y << '	' << "z = " << z << std::endl
+			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl;
 		break;
 	case 27:
 		exit(0);
@@ -159,23 +252,99 @@ void processNormalKeys(unsigned char key, int xx, int yy)
 	}
 }
 
-int main(int argc, char **argv)//* int argc - количество аргументов | char** argv - их описание в виде указателя на строку
+void press_up_normal_key(unsigned char key, int mouse_x_position, int mouse_y_position)
 {
+	switch (key)
+	{
+	case 'a':
+	case 'd':
+		move_x = 0;
+		move_z = 0;
+		break;
+	case 'e':
+	case 'q':
+		move_y = 0;
+		break;
+	case 's':
+	case 'w':
+		move_x = 0;
+		move_z = 0;
+		break;
+	}
+	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
+}
+
+void mouse_func(int button, int buttom_state, int mouse_x_position, int mouse_y_position)
+{
+	if (buttom_state == GLUT_DOWN)
+	{
+		switch (button)
+		{
+		case GLUT_RIGHT_BUTTON:
+			bottoms[2] = true;
+			mouse_x_position_last = mouse_x_position;
+			mouse_y_position_last = mouse_y_position;
+			break;
+		}
+	}
+	if (buttom_state == GLUT_UP)
+	{
+		switch (button)
+		{
+		case GLUT_RIGHT_BUTTON:
+			bottoms[2] = false;
+			mouse_x_position_last = NULL;
+			mouse_y_position_last = NULL;
+			d_angle_xz = 0;
+			d_angle_xy = 0;
+			break;
+		}
+	}
+}
+
+void motion_func(int mouse_x_position, int mouse_y_position)
+{
+	mouse_motion = true;
+	if (bottoms[2])
+	{
+		d_angle_xz = (mouse_x_position - mouse_x_position_last) * mouse_modification;
+		d_angle_xy = (-mouse_y_position + mouse_y_position_last) * mouse_modification;
+		mouse_x_position_last = mouse_x_position;
+		mouse_y_position_last = mouse_y_position;
+	}
+}
+
+void motion_passive_func(int mouse_x_position, int mouse_y_position)
+{
+
+}
+
+int main(int argc, char** argv)//* int argc - количество аргументов | char** argv - их описание в виде указателя на строку
+{
+	glEnable(GL_DEPTH);
+
 	glutInit(&argc, argv);
 	glutInitWindowPosition(400, 100);
-	glutInitWindowSize(800, 800);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+	glutInitWindowSize(wight, hight);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutCreateWindow("Hellow GL!");
-
-	glutReshapeFunc(changeSize);//регистрирует для GLUT функцию обратного вызова
-
-	glutIdleFunc(render_Scene);//регистрирует функцию обратного вызова, которая будет вызываться когда само приложение находится в режиме ожидания
 
 	glutDisplayFunc(render_Scene);
 
-	glutKeyboardFunc(processNormalKeys);
+	glutReshapeFunc(changeSize);// регистрирует для GLUT функцию обратного вызова
 
-	glutSpecialFunc(processSpecialKeys);
+	glutIdleFunc(render_Scene);// регистрирует функцию обратного вызова, которая будет вызываться когда само приложение находится в режиме ожидания
+
+	glutKeyboardFunc(press_normal_key);
+	glutKeyboardUpFunc(press_up_normal_key);
+	glutSpecialFunc(press_special_key);
+	glutSpecialUpFunc(press_up_special_key);// клавиатура
+
+	glutMouseFunc(mouse_func);
+	glutMotionFunc(motion_func);
+	glutPassiveMotionFunc(motion_passive_func);// мышь
 
 	glutMainLoop();
+
+	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
 }
