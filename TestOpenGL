@@ -1,26 +1,26 @@
-/*#define BLACK_KING			-1
-#define BLACK_SUPER_QUIN		-2
-#define	BLACK_QUIN_DIAGONAL		-3
-#define BLACK_QUIN				-4
+/*#define BLACK_KING		-1
+#define BLACK_SUPER_QUIN	-2
+#define	BLACK_QUIN_DIAGONAL	-3
+#define BLACK_QUIN		-4
 #define BLACK_BISHOP_DIAGONAL	-5
-#define BLACK_BISHOP			-6
+#define BLACK_BISHOP		-6
 #define BLACK_KNIGHT_DIAGONAL	-7
-#define BLACK_KNIGHT			-8
-#define BLACK_ROOK				-9
-#define BLACK_PAWN				-10
-#define VOID					 0
-#define WHITE_KING				 1
-#define WHITE_SUPER_QUIN		 2
-#define	WHITE_QUIN_DIAGONAL		 3
-#define WHITE_QUIN				 4
+#define BLACK_KNIGHT		-8
+#define BLACK_ROOK		-9
+#define BLACK_PAWN		-10
+#define VOID			 0
+#define WHITE_KING		 1
+#define WHITE_SUPER_QUIN	 2
+#define	WHITE_QUIN_DIAGONAL	 3
+#define WHITE_QUIN		 4
 #define WHITE_BISHOP_DIAGONAL	 5
-#define WHITE_BISHOP			 6
+#define WHITE_BISHOP		 6
 #define WHITE_KNIGHT_DIAGONAL	 7
-#define WHITE_KNIGHT			 8
-#define WHITE_ROOK				 9
-#define WHITE_PAWN				 10
-#define WHITE					 true
-#define BLACK					 false*/
+#define WHITE_KNIGHT		 8
+#define WHITE_ROOK		 9
+#define WHITE_PAWN		 10
+#define WHITE			 true
+#define BLACK			 false*/
 
 #include <iostream>
 #include<string>
@@ -42,6 +42,8 @@ const bool WHITE = true, BLACK = false;
 int window_wight = 1000, window_hight = 800;
 
 int window_x_left_up_position = 400, window_y_left_up_position = 400;
+
+int cell_x_position = 4, cell_y_position = 4, cell_z_position = 4;
 
 short move_x = 0, move_y = 0, move_z = 0;//возможность перемещения по оси -1 - REVERS; 0 - STOP; 1 - FORVARD
 
@@ -66,6 +68,11 @@ bool show_lines = false;
 bool bottoms[100];
 bool mouse_motion = false;
 
+
+bool cell_in_space(int x, int y, int z)
+{
+	return (x < list->GetElement(0) && x > -1 && y < list->GetElement(1) && y > -1 && z < list->GetElement(2) && z > -1);
+}
 
 void draw_cube(double x_position, double y_position, double z_position, double rang)
 {
@@ -138,11 +145,33 @@ void draw_cube()
 	glutSolidCube(1.0f);
 }
 
+void draw_cell(float distance)
+{
+	const float rang = 0.3f;
+	glPushMatrix();
+	glTranslatef(cell_x_position * distance, cell_y_position * distance, cell_z_position * distance);
+	draw_cube(0, 0, 0, rang);
+	glPopMatrix();
+}
+
 void draw_king(bool white, float figure_size)
 {
 	glBegin(GL_TRIANGLES);
 	glEnd();
 	draw_cube(0, 0, 0, 1);
+	if (show_lines)
+	{
+		if (white)
+		{
+			glColor3f(0.2f, 0.2f, 0.2f);
+		}
+		else
+		{
+			glColor3f(0.8f, 0.8f, 0.8f);
+		}
+
+
+	}
 }
 
 void draw_super_quin(bool white, float figure_size)
@@ -158,6 +187,19 @@ void draw_super_quin(bool white, float figure_size)
 	glBegin(GL_TRIANGLES);
 	glEnd();
 	draw_cube(0, 0, 0, 1);
+	if (show_lines)
+	{
+		if (white)
+		{
+			glColor3f(0.2f, 0.2f, 0.2f);
+		}
+		else
+		{
+			glColor3f(0.8f, 0.8f, 0.8f);
+		}
+
+
+	}
 }
 
 void draw_quin_diagonal(bool white, float figure_size)
@@ -173,6 +215,19 @@ void draw_quin_diagonal(bool white, float figure_size)
 	glBegin(GL_TRIANGLES);
 	glEnd();
 	draw_cube(0, 0, 0, 1);
+	if (show_lines)
+	{
+		if (white)
+		{
+			glColor3f(0.2f, 0.2f, 0.2f);
+		}
+		else
+		{
+			glColor3f(0.8f, 0.8f, 0.8f);
+		}
+
+
+	}
 }
 
 void draw_quin(bool white, float figure_size)
@@ -188,6 +243,19 @@ void draw_quin(bool white, float figure_size)
 	glBegin(GL_TRIANGLES);
 	glEnd();
 	draw_cube(0, 0, 0, 1);
+	if (show_lines)
+	{
+		if (white)
+		{
+			glColor3f(0.2f, 0.2f, 0.2f);
+		}
+		else
+		{
+			glColor3f(0.8f, 0.8f, 0.8f);
+		}
+
+
+	}
 }
 
 void draw_bishop_diagonal(bool white, float figure_size)
@@ -203,6 +271,19 @@ void draw_bishop_diagonal(bool white, float figure_size)
 	glBegin(GL_TRIANGLES);
 	glEnd();
 	draw_cube(0, 0, 0, 1);
+	if (show_lines)
+	{
+		if (white)
+		{
+			glColor3f(0.2f, 0.2f, 0.2f);
+		}
+		else
+		{
+			glColor3f(0.8f, 0.8f, 0.8f);
+		}
+
+
+	}
 }
 
 void draw_bishop(bool white, float figure_size)
@@ -218,6 +299,19 @@ void draw_bishop(bool white, float figure_size)
 	glBegin(GL_TRIANGLES);
 	glEnd();
 	draw_cube(0, 0, 0, 1);
+	if (show_lines)
+	{
+		if (white)
+		{
+			glColor3f(0.2f, 0.2f, 0.2f);
+		}
+		else
+		{
+			glColor3f(0.8f, 0.8f, 0.8f);
+		}
+
+
+	}
 }
 
 void draw_knight_diagonal(bool white, float figure_size)
@@ -233,6 +327,19 @@ void draw_knight_diagonal(bool white, float figure_size)
 	glBegin(GL_TRIANGLES);
 	glEnd();
 	draw_cube(0, 0, 0, 1);
+	if (show_lines)
+	{
+		if (white)
+		{
+			glColor3f(0.2f, 0.2f, 0.2f);
+		}
+		else
+		{
+			glColor3f(0.8f, 0.8f, 0.8f);
+		}
+
+
+	}
 }
 
 void draw_knight(bool white, float figure_size)
@@ -246,8 +353,22 @@ void draw_knight(bool white, float figure_size)
 		glColor3f(0.1f, 0.1f, 0.1f);
 	}
 	glBegin(GL_TRIANGLES);
+
 	glEnd();
 	draw_cube(0, 0, 0, 1);
+	if (show_lines)
+	{
+		if (white)
+		{
+			glColor3f(0.2f, 0.2f, 0.2f);
+		}
+		else
+		{
+			glColor3f(0.8f, 0.8f, 0.8f);
+		}
+
+
+	}
 }
 
 void draw_rook(bool white, float figure_size)
@@ -755,6 +876,9 @@ void draw_pawn(bool white, float figure_size)
 	glPushMatrix();
 	glTranslatef(0.0, 0.0, 0.0);
 	glRotatef(0.0, 0.0, 0.0, 0.0);
+
+	glutSolidSphere(0.25f * figure_size, figure_size * 10, figure_size * 10);
+
 	glBegin(GL_TRIANGLES);
 
 	glVertex3f(0.0, 0.0, 0.0);
@@ -970,64 +1094,64 @@ void draw_figure(int figure_type, float figure_size)
 	switch(figure_type)
 	{
 	case WHITE_KING:
-		draw_king(WHITE, figure_size);
+		draw_king(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_SUPER_QUIN:
-		draw_super_quin(WHITE, figure_size);
+		draw_super_quin(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_QUIN_DIAGONAL:
-		draw_quin_diagonal(WHITE, figure_size);
+		draw_quin_diagonal(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_QUIN:
-		draw_quin(WHITE, figure_size);
+		draw_quin(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_BISHOP_DIAGONAL:
-		draw_bishop_diagonal(WHITE, figure_size);
+		draw_bishop_diagonal(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_BISHOP:
-		draw_bishop(WHITE, figure_size);
+		draw_bishop(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_KNIGHT_DIAGONAL:
-		draw_knight_diagonal(WHITE, figure_size);
+		draw_knight_diagonal(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_KNIGHT:
-		draw_knight(WHITE, figure_size);
+		draw_knight(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_ROOK:
-		draw_rook(WHITE, figure_size);
+		draw_rook(WHITE, figure_size * 0.25f);
 		break;
 	case WHITE_PAWN:
-		draw_pawn(WHITE, figure_size);
+		draw_pawn(WHITE, figure_size * 1.0f);
 		break;
 	case BLACK_KING:
-		draw_king(BLACK, figure_size);
+		draw_king(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_SUPER_QUIN:
-		draw_super_quin(BLACK, figure_size);
+		draw_super_quin(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_QUIN_DIAGONAL:
-		draw_quin_diagonal(BLACK, figure_size);
+		draw_quin_diagonal(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_QUIN:
-		draw_quin(BLACK, figure_size);
+		draw_quin(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_BISHOP_DIAGONAL:
-		draw_bishop_diagonal(BLACK, figure_size);
+		draw_bishop_diagonal(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_BISHOP:
-		draw_bishop(BLACK, figure_size);
+		draw_bishop(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_KNIGHT_DIAGONAL:
-		draw_knight_diagonal(BLACK, figure_size);
+		draw_knight_diagonal(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_KNIGHT:
-		draw_king(BLACK, figure_size);
+		draw_king(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_ROOK:
-		draw_rook(BLACK, figure_size);
+		draw_rook(BLACK, figure_size * 0.25f);
 		break;
 	case BLACK_PAWN:
-		draw_pawn(BLACK, figure_size);
+		draw_pawn(BLACK, figure_size * 1.0f);
 		break;
 	}
 }
@@ -1045,56 +1169,15 @@ void draw_all_figures(float distance)
 		{
 			for (int z_pos = 0; z_pos < 8; z_pos++)
 			{
-				switch (gamespase1->GetPoint(x_pos + y_pos * list->GetElement(0) + z_pos * list->GetElement(0) * list->GetElement(1)))
-				{
-				case WHITE_ROOK:
-					glPushMatrix();
-					glTranslatef(x_pos * distance, y_pos * distance, z_pos * distance);
-					draw_rook(WHITE, 0.25f);
-					glPopMatrix();
-					break;
-				case WHITE_PAWN:
-					glPushMatrix();
-					glTranslatef(x_pos * distance, y_pos * distance, z_pos * distance);
-					draw_pawn(WHITE, 1.0f);
-					glPopMatrix();
-					break;
-				case BLACK_ROOK:
-					glPushMatrix();
-					glTranslatef(x_pos * distance, y_pos * distance, z_pos * distance);
-					draw_rook(BLACK, 0.25f);
-					glPopMatrix();
-					break;
-				case BLACK_PAWN:
-					glPushMatrix();
-					glTranslatef(x_pos * distance, y_pos * distance, z_pos * distance);
-					draw_pawn(BLACK, 1.0f);
-					glPopMatrix();
-					break;
-				default:
-					if (gamespase1->GetPoint(x_pos + y_pos * list->GetElement(0) + z_pos * list->GetElement(0) * list->GetElement(1)) > 0)
-					{
-						glColor3f(0.8f, 0.8f, 0.8f);
-						glPushMatrix();
-						glTranslatef(x_pos * distance, y_pos * distance, z_pos * distance);
-						draw_cube();
-						glPopMatrix();
-					}
-					else if (gamespase1->GetPoint(x_pos + y_pos * list->GetElement(0) + z_pos * list->GetElement(0) * list->GetElement(1)) < 0)
-					{
-						glColor3f(0.2f, 0.2f, 0.2f);
-						glPushMatrix();
-						glTranslatef(x_pos * distance, y_pos * distance, z_pos * distance);
-						draw_cube();
-						glPopMatrix();
-					}
-					break;
-				}
+				glPushMatrix();
+				glTranslatef(x_pos * distance, y_pos * distance, z_pos * distance);
+				draw_figure(gamespase1->GetPoint(x_pos + y_pos * list->GetElement(0) + z_pos * list->GetElement(0) * list->GetElement(1)), 1.0f);
+				glPopMatrix();
 			}
 		}
 	}
+	draw_cell(distance);
 }
-
 
 void draw_poligon()
 {
@@ -1109,6 +1192,8 @@ void draw_poligon()
 	glVertex3f(100.0f, -4.0f, -100.0f);
 	glVertex3f(100.0f, -4.0f, 100.0f);
 }
+
+
 
 void recalculate_camera()
 {
@@ -1195,6 +1280,52 @@ void changeSize(int window_wight, int window_hight)
 
 void press_special_key(int key, int mouse_x_position, int mouse_y_position)
 {
+	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+	switch (key)
+	{
+	case GLUT_KEY_PAGE_UP:
+		cell_y_position++;
+		if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+		{
+			cell_y_position--;
+		}
+		break;
+	case GLUT_KEY_PAGE_DOWN:
+		cell_y_position--;
+		if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+		{
+			cell_y_position++;
+		}
+		break;
+	case GLUT_KEY_UP:
+			cell_x_position++;
+			if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position--;
+			}
+		break;
+	case GLUT_KEY_DOWN:
+			cell_x_position--;
+			if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position++;
+			}
+		break;
+	case GLUT_KEY_LEFT:
+		cell_z_position--;
+		if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+		{
+			cell_z_position++;
+		}
+		break;
+	case GLUT_KEY_RIGHT:
+		cell_z_position++;
+		if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+		{
+			cell_z_position--;
+		}
+		break;
+	}
 }
 
 void press_up_special_key(int key, int mouse_x_position, int mouse_y_position)
@@ -1246,7 +1377,8 @@ void press_normal_key(unsigned char key, int mouse_x_position, int mouse_y_posit
 	case 'x':
 		std::cout << "x = " << x << '	' << "y = " << y << '	' << "z = " << z << std::endl
 			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl
-			<< "test_angle = " << test_angle << std::endl;
+			<< "test_angle = " << test_angle << std::endl
+			<< "cell_x = " << cell_x_position << '	' << "cell_y = " << cell_y_position << '	' << "cell_z = " << cell_z_position << std::endl;
 		break;
 	case 27:
 		exit(0);
@@ -1328,7 +1460,7 @@ int main(int argc, char** argv)//* int argc - количество аргуме�
 	glEnable(GL_DEPTH);
 
 	glutInit(&argc, argv);
-	glutInitWindowPosition(400, 100);
+	glutInitWindowPosition(960 - window_wight / 2, 540 - window_hight / 2);
 	glutInitWindowSize(window_wight, window_hight);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutCreateWindow("Chess3D");
