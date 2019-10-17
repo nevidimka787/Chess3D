@@ -1,41 +1,21 @@
-/*#define BLACK_KING		-1
-#define BLACK_SUPER_QUIN	-2
-#define	BLACK_QUIN_DIAGONAL	-3
-#define BLACK_QUIN		-4
-#define BLACK_BISHOP_DIAGONAL	-5
-#define BLACK_BISHOP		-6
-#define BLACK_KNIGHT_DIAGONAL	-7
-#define BLACK_KNIGHT		-8
-#define BLACK_ROOK		-9
-#define BLACK_PAWN		-10
-#define VOID			 0
-#define WHITE_KING		 1
-#define WHITE_SUPER_QUIN	 2
-#define	WHITE_QUIN_DIAGONAL	 3
-#define WHITE_QUIN		 4
-#define WHITE_BISHOP_DIAGONAL	 5
-#define WHITE_BISHOP		 6
-#define WHITE_KNIGHT_DIAGONAL	 7
-#define WHITE_KNIGHT		 8
-#define WHITE_ROOK		 9
-#define WHITE_PAWN		 10
-#define WHITE			 true
-#define BLACK			 false*/
-
 #include <iostream>
 #include<string>
+#include<random>
+#include<time.h>
 #include "List.h"
 #include "List.cpp"
 #include "GameSpace.h"
 #include "GameSpace.cpp"
 #include <GL/glut.h>
 
-double test_angle = 0;
-
 List* list = new List(1);
-GameSpace* gamespase1 = new GameSpace(*list);
+GameSpace * gamespase1 = new GameSpace(*list);
 
 const int BLACK_KING = -1, BLACK_SUPER_QUIN = -2, BLACK_QUIN_DIAGONAL = -3, BLACK_QUIN = -4, BLACK_BISHOP_DIAGONAL = -5, BLACK_BISHOP = -6, BLACK_KNIGHT_DIAGONAL = -7, BLACK_KNIGHT = -8, BLACK_ROOK = -9, BLACK_PAWN = -10, _VOID = 0, WHITE_KING = 1, WHITE_SUPER_QUIN = 2, WHITE_QUIN_DIAGONAL = 3, WHITE_QUIN = 4, WHITE_BISHOP_DIAGONAL = 5, WHITE_BISHOP = 6, WHITE_KNIGHT_DIAGONAL = 7, WHITE_KNIGHT = 8, WHITE_ROOK = 9, WHITE_PAWN = 10;
+
+float distance_between_figures = 3.0f;
+
+const float DELTA_DISTANCE_BETWEEN_FIGURES = 0.5f, MAX_DISTANCE_BETWEEN_FIGURES = 10.0f, MIN_DISTANCE_BETWEEN_FIGURES = 2.0f;
 
 const bool WHITE = true, BLACK = false;
 
@@ -45,7 +25,11 @@ int window_x_left_up_position = 400, window_y_left_up_position = 400;
 
 int cell_x_position = 4, cell_y_position = 4, cell_z_position = 4;
 
+int special_key_number = 0, normal_key_number = 0;
+
 short move_x = 0, move_y = 0, move_z = 0;//возможность перемещения по оси -1 - REVERS; 0 - STOP; 1 - FORVARD
+
+short draw_grid = 0;
 
 float red = 1.0f, blue = 1.0f, green = 1.0f, alpha = 0.1f;
 
@@ -63,18 +47,23 @@ float camera_speed = 0.2f, mouse_modification = 0.001f;// скорость
 
 bool forvard_backvard = true;
 
-bool show_lines = false;
+bool show_lines = false, draw_all_variants = true;
+
+bool game_go_automatic = false, next_way = false;
 
 bool bottoms[100];
 bool mouse_motion = false;
 
 
-bool cell_in_space(int x, int y, int z)
+
+bool CellInSpace(int x, int y, int z)
 {
 	return (x < list->GetElement(0) && x > -1 && y < list->GetElement(1) && y > -1 && z < list->GetElement(2) && z > -1);
 }
 
-void draw_cube(double x_position, double y_position, double z_position, double rang)
+//RENDER's FUNCTIONS...
+
+void DrawCube(double x_position, double y_position, double z_position, double rang)
 {
 	glBegin(GL_TRIANGLES);
 
@@ -140,25 +129,25 @@ void draw_cube(double x_position, double y_position, double z_position, double r
 	glEnd();
 }
 
-void draw_cube()
+void DrawCube()
 {
 	glutSolidCube(1.0f);
 }
 
-void draw_cell(float distance)
+void DrawCell()
 {
 	const float rang = 0.3f;
 	glPushMatrix();
-	glTranslatef(cell_x_position * distance, cell_y_position * distance, cell_z_position * distance);
-	draw_cube(0, 0, 0, rang);
+	glTranslatef(cell_x_position * distance_between_figures, cell_y_position * distance_between_figures, cell_z_position * distance_between_figures);
+	DrawCube(0, 0, 0, rang);
 	glPopMatrix();
 }
 
-void draw_king(bool white, float figure_size)
+void DrawKing(bool white, float figure_size)
 {
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	draw_cube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, 1);
 	if (show_lines)
 	{
 		if (white)
@@ -174,35 +163,7 @@ void draw_king(bool white, float figure_size)
 	}
 }
 
-void draw_super_quin(bool white, float figure_size)
-{
-	if (white)
-	{
-		glColor3f(0.9f, 0.9f, 0.9f);
-	}
-	else
-	{
-		glColor3f(0.1f, 0.1f, 0.1f);
-	}
-	glBegin(GL_TRIANGLES);
-	glEnd();
-	draw_cube(0, 0, 0, 1);
-	if (show_lines)
-	{
-		if (white)
-		{
-			glColor3f(0.2f, 0.2f, 0.2f);
-		}
-		else
-		{
-			glColor3f(0.8f, 0.8f, 0.8f);
-		}
-
-
-	}
-}
-
-void draw_quin_diagonal(bool white, float figure_size)
+void DrawSuperQuin(bool white, float figure_size)
 {
 	if (white)
 	{
@@ -214,7 +175,7 @@ void draw_quin_diagonal(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	draw_cube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, 1);
 	if (show_lines)
 	{
 		if (white)
@@ -230,7 +191,7 @@ void draw_quin_diagonal(bool white, float figure_size)
 	}
 }
 
-void draw_quin(bool white, float figure_size)
+void DrawQuinDiagonal(bool white, float figure_size)
 {
 	if (white)
 	{
@@ -242,7 +203,7 @@ void draw_quin(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	draw_cube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, 1);
 	if (show_lines)
 	{
 		if (white)
@@ -258,7 +219,7 @@ void draw_quin(bool white, float figure_size)
 	}
 }
 
-void draw_bishop_diagonal(bool white, float figure_size)
+void DrawQuin(bool white, float figure_size)
 {
 	if (white)
 	{
@@ -270,7 +231,7 @@ void draw_bishop_diagonal(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	draw_cube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, 1);
 	if (show_lines)
 	{
 		if (white)
@@ -286,7 +247,7 @@ void draw_bishop_diagonal(bool white, float figure_size)
 	}
 }
 
-void draw_bishop(bool white, float figure_size)
+void DrawBishopDiagonal(bool white, float figure_size)
 {
 	if (white)
 	{
@@ -298,7 +259,7 @@ void draw_bishop(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	draw_cube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, 1);
 	if (show_lines)
 	{
 		if (white)
@@ -314,7 +275,7 @@ void draw_bishop(bool white, float figure_size)
 	}
 }
 
-void draw_knight_diagonal(bool white, float figure_size)
+void DrawBishop(bool white, float figure_size)
 {
 	if (white)
 	{
@@ -326,7 +287,7 @@ void draw_knight_diagonal(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	draw_cube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, 1);
 	if (show_lines)
 	{
 		if (white)
@@ -342,7 +303,35 @@ void draw_knight_diagonal(bool white, float figure_size)
 	}
 }
 
-void draw_knight(bool white, float figure_size)
+void DrawKnightDiagonal(bool white, float figure_size)
+{
+	if (white)
+	{
+		glColor3f(0.9f, 0.9f, 0.9f);
+	}
+	else
+	{
+		glColor3f(0.1f, 0.1f, 0.1f);
+	}
+	glBegin(GL_TRIANGLES);
+	glEnd();
+	DrawCube(0, 0, 0, 1);
+	if (show_lines)
+	{
+		if (white)
+		{
+			glColor3f(0.2f, 0.2f, 0.2f);
+		}
+		else
+		{
+			glColor3f(0.8f, 0.8f, 0.8f);
+		}
+
+
+	}
+}
+
+void DrawKnight(bool white, float figure_size)
 {
 	if (white)
 	{
@@ -355,7 +344,7 @@ void draw_knight(bool white, float figure_size)
 	glBegin(GL_TRIANGLES);
 
 	glEnd();
-	draw_cube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, 1);
 	if (show_lines)
 	{
 		if (white)
@@ -371,7 +360,7 @@ void draw_knight(bool white, float figure_size)
 	}
 }
 
-void draw_rook(bool white, float figure_size)
+void DrawRook(bool white, float figure_size)
 {
 	const double scale = 4;
 	if (white)
@@ -568,78 +557,78 @@ void draw_rook(bool white, float figure_size)
 	glRotatef(90.0, 0.0, 0.0, 1.0);
 	glBegin(GL_TRIANGLES);
 
-	glVertex3f(figure_size, scale* figure_size, 0);
-	glVertex3f(figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-	glVertex3f(-figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(figure_size, scale * figure_size, 0);
+	glVertex3f(figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
 
-	glVertex3f(figure_size, scale* figure_size, 0);
-	glVertex3f(-figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-	glVertex3f(-figure_size, scale* figure_size, 0);
+	glVertex3f(figure_size, scale * figure_size, 0);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+	glVertex3f(-figure_size, scale * figure_size, 0);
 
-	glVertex3f(figure_size, scale* figure_size, 0);
-	glVertex3f(-figure_size, scale* figure_size, 0);
-	glVertex3f(-figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+	glVertex3f(figure_size, scale * figure_size, 0);
+	glVertex3f(-figure_size, scale * figure_size, 0);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 
-	glVertex3f(figure_size, scale* figure_size, 0);
-	glVertex3f(-figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
-	glVertex3f(figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+	glVertex3f(figure_size, scale * figure_size, 0);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
+	glVertex3f(figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 
 
-	glVertex3f(figure_size, scale* figure_size, 0);
-	glVertex3f(figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(figure_size, scale * figure_size, 0);
+	glVertex3f(figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
 	glVertex3f(figure_size, -scale * figure_size, 0);
 
-	glVertex3f(figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
 	glVertex3f(figure_size, -scale * figure_size, 0);
-	glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 
-	glVertex3f(figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-	glVertex3f(-figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-	glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+	glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 
-	glVertex3f(-figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-	glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
-	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+	glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
+	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 
-	glVertex3f(-figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-	glVertex3f(-figure_size, scale* figure_size, 0);
-	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+	glVertex3f(-figure_size, scale * figure_size, 0);
+	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 
-	glVertex3f(-figure_size, scale* figure_size, 0);
-	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(-figure_size, scale * figure_size, 0);
+	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 	glVertex3f(-figure_size, -scale * figure_size, 0);
 
-	glVertex3f(-figure_size, scale* figure_size, 0);
-	glVertex3f(-figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+	glVertex3f(-figure_size, scale * figure_size, 0);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 	glVertex3f(-figure_size, -scale * figure_size, 0);
 
-	glVertex3f(-figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 	glVertex3f(-figure_size, -scale * figure_size, 0);
 	glVertex3f(-figure_size * 0.5, -scale * figure_size, -figure_size * sqrt(3) / 2);
 
-	glVertex3f(-figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
-	glVertex3f(figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+	glVertex3f(-figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
+	glVertex3f(figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 	glVertex3f(-figure_size * 0.5, -scale * figure_size, -figure_size * sqrt(3) / 2);
 
-	glVertex3f(figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+	glVertex3f(figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 	glVertex3f(-figure_size * 0.5, -scale * figure_size, -figure_size * sqrt(3) / 2);
 	glVertex3f(figure_size * 0.5, -scale * figure_size, -figure_size * sqrt(3) / 2);
 
-	glVertex3f(figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
-	glVertex3f(figure_size, scale* figure_size, 0);
+	glVertex3f(figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
+	glVertex3f(figure_size, scale * figure_size, 0);
 	glVertex3f(figure_size * 0.5, -scale * figure_size, -figure_size * sqrt(3) / 2);
 
-	glVertex3f(figure_size, scale* figure_size, 0);
+	glVertex3f(figure_size, scale * figure_size, 0);
 	glVertex3f(figure_size * 0.5, -scale * figure_size, -figure_size * sqrt(3) / 2);
 	glVertex3f(figure_size, -scale * figure_size, 0);
 
 
 	glVertex3f(figure_size, -scale * figure_size, 0);
-	glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
-	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
+	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 
 	glVertex3f(figure_size, -scale * figure_size, 0);
-	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+	glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 	glVertex3f(-figure_size, -scale * figure_size, 0);
 
 	glVertex3f(figure_size, -scale * figure_size, 0);
@@ -796,51 +785,51 @@ void draw_rook(bool white, float figure_size)
 		glRotatef(90.0, 0.0, 0.0, 1.0);
 		glBegin(GL_LINES);
 
-		glVertex3f(figure_size, scale* figure_size, 0);
-		glVertex3f(figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
+		glVertex3f(figure_size, scale * figure_size, 0);
+		glVertex3f(figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
 
-		glVertex3f(figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-		glVertex3f(-figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
+		glVertex3f(figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+		glVertex3f(-figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
 
-		glVertex3f(-figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-		glVertex3f(-figure_size, scale* figure_size, 0);
+		glVertex3f(-figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+		glVertex3f(-figure_size, scale * figure_size, 0);
 
-		glVertex3f(-figure_size, scale* figure_size, 0);
-		glVertex3f(-figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+		glVertex3f(-figure_size, scale * figure_size, 0);
+		glVertex3f(-figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 
-		glVertex3f(-figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
-		glVertex3f(figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+		glVertex3f(-figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
+		glVertex3f(figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 
-		glVertex3f(figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
-		glVertex3f(figure_size, scale* figure_size, 0);
+		glVertex3f(figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
+		glVertex3f(figure_size, scale * figure_size, 0);
 
 
-		glVertex3f(figure_size, scale* figure_size, 0);
+		glVertex3f(figure_size, scale * figure_size, 0);
 		glVertex3f(figure_size, -scale * figure_size, 0);
 
-		glVertex3f(figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-		glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+		glVertex3f(figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+		glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 
-		glVertex3f(-figure_size * 0.5, scale* figure_size, figure_size* sqrt(3) / 2);
-		glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+		glVertex3f(-figure_size * 0.5, scale * figure_size, figure_size * sqrt(3) / 2);
+		glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 
-		glVertex3f(-figure_size, scale* figure_size, 0);
+		glVertex3f(-figure_size, scale * figure_size, 0);
 		glVertex3f(-figure_size, -scale * figure_size, 0);
 
-		glVertex3f(-figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+		glVertex3f(-figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 		glVertex3f(-figure_size * 0.5, -scale * figure_size, -figure_size * sqrt(3) / 2);
 
-		glVertex3f(figure_size * 0.5, scale* figure_size, -figure_size * sqrt(3) / 2);
+		glVertex3f(figure_size * 0.5, scale * figure_size, -figure_size * sqrt(3) / 2);
 		glVertex3f(figure_size * 0.5, -scale * figure_size, -figure_size * sqrt(3) / 2);
 
 
 		glVertex3f(figure_size, -scale * figure_size, 0);
-		glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+		glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 
-		glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
-		glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+		glVertex3f(figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
+		glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 
-		glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size* sqrt(3) / 2);
+		glVertex3f(-figure_size * 0.5, -scale * figure_size, figure_size * sqrt(3) / 2);
 		glVertex3f(-figure_size, -scale * figure_size, 0);
 
 		glVertex3f(-figure_size, -scale * figure_size, 0);
@@ -857,7 +846,7 @@ void draw_rook(bool white, float figure_size)
 	}
 }
 
-void draw_pawn(bool white, float figure_size)
+void DrawPawn(bool white, float figure_size)
 {
 	const double i = 0.5;// угол отклонения от высоты
 	const double xi = 0.5;// угол отклонения от оси x
@@ -1089,78 +1078,78 @@ void draw_pawn(bool white, float figure_size)
 	}
 }
 
-void draw_figure(int figure_type, float figure_size)
+void DrawFigure(int figure_type, float figure_size)
 {
-	switch(figure_type)
+	switch (figure_type)
 	{
 	case WHITE_KING:
-		draw_king(WHITE, figure_size * 1.0f);
+		DrawKing(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_SUPER_QUIN:
-		draw_super_quin(WHITE, figure_size * 1.0f);
+		DrawSuperQuin(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_QUIN_DIAGONAL:
-		draw_quin_diagonal(WHITE, figure_size * 1.0f);
+		DrawQuinDiagonal(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_QUIN:
-		draw_quin(WHITE, figure_size * 1.0f);
+		DrawQuin(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_BISHOP_DIAGONAL:
-		draw_bishop_diagonal(WHITE, figure_size * 1.0f);
+		DrawBishopDiagonal(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_BISHOP:
-		draw_bishop(WHITE, figure_size * 1.0f);
+		DrawBishop(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_KNIGHT_DIAGONAL:
-		draw_knight_diagonal(WHITE, figure_size * 1.0f);
+		DrawKnightDiagonal(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_KNIGHT:
-		draw_knight(WHITE, figure_size * 1.0f);
+		DrawKnight(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_ROOK:
-		draw_rook(WHITE, figure_size * 0.25f);
+		DrawRook(WHITE, figure_size * 0.25f);
 		break;
 	case WHITE_PAWN:
-		draw_pawn(WHITE, figure_size * 1.0f);
+		DrawPawn(WHITE, figure_size * 1.0f);
 		break;
 	case BLACK_KING:
-		draw_king(BLACK, figure_size * 1.0f);
+		DrawKing(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_SUPER_QUIN:
-		draw_super_quin(BLACK, figure_size * 1.0f);
+		DrawSuperQuin(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_QUIN_DIAGONAL:
-		draw_quin_diagonal(BLACK, figure_size * 1.0f);
+		DrawQuinDiagonal(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_QUIN:
-		draw_quin(BLACK, figure_size * 1.0f);
+		DrawQuin(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_BISHOP_DIAGONAL:
-		draw_bishop_diagonal(BLACK, figure_size * 1.0f);
+		DrawBishopDiagonal(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_BISHOP:
-		draw_bishop(BLACK, figure_size * 1.0f);
+		DrawBishop(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_KNIGHT_DIAGONAL:
-		draw_knight_diagonal(BLACK, figure_size * 1.0f);
+		DrawKnightDiagonal(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_KNIGHT:
-		draw_king(BLACK, figure_size * 1.0f);
+		DrawKnight(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_ROOK:
-		draw_rook(BLACK, figure_size * 0.25f);
+		DrawRook(BLACK, figure_size * 0.25f);
 		break;
 	case BLACK_PAWN:
-		draw_pawn(BLACK, figure_size * 1.0f);
+		DrawPawn(BLACK, figure_size * 1.0f);
 		break;
 	}
 }
 
-void draw_all_figures(float distance)
+void DrawAllFigures()
 {
 	glPushMatrix();
 	glTranslatef(1000.0f, 1000.0f, 1000.0f);
-	draw_cube();
+	DrawCube();
 	glPopMatrix();
 
 	for (int x_pos = 0; x_pos < 8; x_pos++)
@@ -1170,13 +1159,133 @@ void draw_all_figures(float distance)
 			for (int z_pos = 0; z_pos < 8; z_pos++)
 			{
 				glPushMatrix();
-				glTranslatef(x_pos * distance, y_pos * distance, z_pos * distance);
-				draw_figure(gamespase1->GetPoint(x_pos + y_pos * list->GetElement(0) + z_pos * list->GetElement(0) * list->GetElement(1)), 1.0f);
+				glTranslatef(x_pos * distance_between_figures, y_pos * distance_between_figures, z_pos * distance_between_figures);
+				DrawFigure(gamespase1->GetPoint(x_pos + y_pos * list->GetElement(0) + z_pos * list->GetElement(0) * list->GetElement(1)), 1.0f);
 				glPopMatrix();
 			}
 		}
 	}
-	draw_cell(distance);
+}
+
+void DrawAllVariants()
+{
+	for (int n = 0; n < list->GetElement(0) * list->GetElement(1) * list->GetElement(2); n++)
+	{
+		if (gamespase1->MeetGameRule(cell_x_position, cell_y_position, cell_z_position, n))
+		{
+			glPushMatrix();
+			glTranslatef(n % list->GetElement(0) * distance_between_figures, (n / list->GetElement(0)) % list->GetElement(1) * distance_between_figures, (n / (list->GetElement(0) * list->GetElement(1))) % list->GetElement(2) * distance_between_figures);
+			glColor3f(1.0f, 0.0f, 0.0f);
+			glutSolidCube(0.2f);
+			glPopMatrix();
+		}
+	}
+}
+
+void DrawSceneGrid()
+{
+	glColor3f(0.0f, 1.0f, 0.0f);
+	for (int x = 0; x <= list->GetElement(0); x++)
+	{
+		for (int y = 0; y <= list->GetElement(1); y++)
+		{
+			glPushMatrix();
+			glTranslatef((x - 0.5f) * distance_between_figures, (y - 0.5f) * distance_between_figures, -0.5f * distance_between_figures);
+			glBegin(GL_LINES);
+			glVertex3f(0, 0, 0);
+			glVertex3f(0, 0, list->GetElement(2) * distance_between_figures);
+			glEnd();
+			glPopMatrix();
+		}
+	}
+	for (int y = 0; y <= list->GetElement(1); y++)
+	{
+		for (int z = 0; z <= list->GetElement(2); z++)
+		{
+			glPushMatrix();
+			glTranslatef(-0.5f * distance_between_figures, (y - 0.5f) * distance_between_figures, (z - 0.5f) * distance_between_figures);
+			glBegin(GL_LINES);
+			glVertex3f(0, 0, 0);
+			glVertex3f(list->GetElement(0) * distance_between_figures, 0, 0);
+			glEnd();
+			glPopMatrix();
+		}
+	}
+	for (int z = 0; z <= list->GetElement(2); z++)
+	{
+		for (int x = 0; x <= list->GetElement(0); x++)
+		{
+			glPushMatrix();
+			glTranslatef((x - 0.5f) * distance_between_figures, -0.5f * distance_between_figures, (z - 0.5f) * distance_between_figures);
+			glBegin(GL_LINES);
+			glVertex3f(0, 0, 0);
+			glVertex3f(0, list->GetElement(1) * distance_between_figures, 0);
+			glEnd();
+			glPopMatrix();
+		}
+	}
+}
+
+void DrawAll()
+{
+	DrawAllFigures();
+	if (!game_go_automatic)
+	{
+		DrawCell();
+	}
+	if (draw_all_variants)
+	{
+		DrawAllVariants();
+	}
+	switch (draw_grid)
+	{
+	case 0:
+		show_lines = false;
+		break;
+	case 1:
+		DrawSceneGrid();
+		break;
+	case 3:
+		DrawSceneGrid();
+	case 2:
+		show_lines = true;
+		break;
+	}
+	if (game_go_automatic)
+	{
+		while (!next_way)
+		{
+			srand(time(NULL));
+			int r1 = rand() % (list->GetElement(0) * list->GetElement(1) * list->GetElement(2));
+			srand(time(NULL));
+			int r2 = rand() % (list->GetElement(0) * list->GetElement(1) * list->GetElement(2));
+			if (gamespase1->MeetGameRule(r1, r2))
+			{
+				next_way = true;
+				gamespase1->ReplasePoints(r1, r2);
+				if (gamespase1->IsMoveWhite())
+				{
+					gamespase1->MoveBlack();
+				}
+				if (gamespase1->IsMoveBlack())
+				{
+					gamespase1->MoveWhite();
+				}
+				if (gamespase1->Mat(true))
+				{
+					std::cout << "White win!" << std::endl;
+					game_go_automatic = false;
+				}
+				if (gamespase1->Mat(false))
+				{
+					std::cout << "Black win!" << std::endl;
+					game_go_automatic = false;
+				}
+			}
+			std::cout << r1 << ' ' << r2 << std::endl;
+		}
+		next_way = false;
+	}
 }
 
 void draw_poligon()
@@ -1227,8 +1336,6 @@ void render_camera()
 void render_Scene()
 {
 
-	test_angle += 0.5;
-
 	glClearColor(0.4, 0.4, 1.0, 1.0);// цвет фонa
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1239,9 +1346,12 @@ void render_Scene()
 
 	render_camera();
 
-	draw_all_figures(5.0);
+	DrawAll();
+
+	glDisable(GL_DEPTH_TEST);
 
 	glutSwapBuffers();
+
 	if (!mouse_motion)
 	{
 		d_angle_xy = 0;
@@ -1278,52 +1388,61 @@ void changeSize(int window_wight, int window_hight)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+//KEIS' FUNCTIONS...
+
 void press_special_key(int key, int mouse_x_position, int mouse_y_position)
 {
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+	special_key_number = key;
 	switch (key)
 	{
 	case GLUT_KEY_PAGE_UP:
 		cell_y_position++;
-		if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
 		{
 			cell_y_position--;
 		}
 		break;
 	case GLUT_KEY_PAGE_DOWN:
 		cell_y_position--;
-		if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
 		{
 			cell_y_position++;
 		}
 		break;
 	case GLUT_KEY_UP:
-			cell_x_position++;
-			if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
-			{
-				cell_x_position--;
-			}
+		cell_x_position++;
+		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+		{
+			cell_x_position--;
+		}
 		break;
 	case GLUT_KEY_DOWN:
-			cell_x_position--;
-			if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
-			{
-				cell_x_position++;
-			}
+		cell_x_position--;
+		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+		{
+			cell_x_position++;
+		}
 		break;
 	case GLUT_KEY_LEFT:
 		cell_z_position--;
-		if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
 		{
 			cell_z_position++;
 		}
 		break;
 	case GLUT_KEY_RIGHT:
 		cell_z_position++;
-		if (!cell_in_space(cell_x_position, cell_y_position, cell_z_position))
+		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
 		{
 			cell_z_position--;
 		}
+		break;
+	case GLUT_KEY_END:
+		game_go_automatic = true;
+		break;
+	default:
+		std::cout << "Special: " << key << std::endl;
 		break;
 	}
 }
@@ -1331,13 +1450,30 @@ void press_special_key(int key, int mouse_x_position, int mouse_y_position)
 void press_up_special_key(int key, int mouse_x_position, int mouse_y_position)
 {
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
+	special_key_number = 0;
 }
 
 void press_normal_key(unsigned char key, int mouse_x_position, int mouse_y_position)
 {
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+	normal_key_number = key;
 	switch (key)
 	{
+	case 13://Enter
+		if (game_go_automatic)
+		{
+			game_go_automatic = false;
+			draw_all_variants = true;
+		}
+		else
+		{
+			game_go_automatic = true;
+			draw_all_variants = false;
+		}
+		break;
+	case 27://Esc
+		exit(0);
+		break;
 	case 'a':
 		forvard_backvard = false;
 		move_x = -1;
@@ -1351,14 +1487,14 @@ void press_normal_key(unsigned char key, int mouse_x_position, int mouse_y_posit
 	case 'e':
 		move_y = 1;
 		break;
-	case 'l':
-		if (show_lines)
+	case 'g':
+		if (draw_grid < 3)
 		{
-			show_lines = false;
+			draw_grid++;
 		}
 		else
 		{
-			show_lines = true;
+			draw_grid = 0;
 		}
 		break;
 	case 'q':
@@ -1377,36 +1513,102 @@ void press_normal_key(unsigned char key, int mouse_x_position, int mouse_y_posit
 	case 'x':
 		std::cout << "x = " << x << '	' << "y = " << y << '	' << "z = " << z << std::endl
 			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl
-			<< "test_angle = " << test_angle << std::endl
-			<< "cell_x = " << cell_x_position << '	' << "cell_y = " << cell_y_position << '	' << "cell_z = " << cell_z_position << std::endl;
+			<< "cell_x = " << cell_x_position << '	' << "cell_y = " << cell_y_position << '	' << "cell_z = " << cell_z_position << std::endl
+			<< "grid_number " << draw_grid << std::endl;
 		break;
-	case 27:
-		exit(0);
+	case 244://ф a
+		forvard_backvard = false;
+		move_x = -1;
+		move_z = 1;
+		break;
+	case 226://в d
+		forvard_backvard = false;
+		move_x = 1;
+		move_z = -1;
+		break;
+	case 243://у e
+		move_y = 1;
+		break;
+	case 239://g п
+		if (draw_grid < 3)
+		{
+			draw_grid++;
+		}
+		else
+		{
+			draw_grid = 0;
+		}
+		break;
+	case 233://й q
+		move_y = -1;
+		break;
+	case 251://ы s
+		forvard_backvard = true;
+		move_x = -1;
+		move_z = -1;
+		break;
+	case 246://ц w
+		forvard_backvard = true;
+		move_x = 1;
+		move_z = 1;
+		break;
+	case 247://ч x
+		std::cout << "x = " << x << '	' << "y = " << y << '	' << "z = " << z << std::endl
+			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl
+			<< "cell_x = " << cell_x_position << '	' << "cell_y = " << cell_y_position << '	' << "cell_z = " << cell_z_position << std::endl
+			<< "grid_number " << draw_grid << std::endl;
+		break;
+	case '=':
+	case '+':
+		if (distance_between_figures < MAX_DISTANCE_BETWEEN_FIGURES)
+		distance_between_figures += DELTA_DISTANCE_BETWEEN_FIGURES;
+		break;
+	case '-':
+		if (distance_between_figures > MIN_DISTANCE_BETWEEN_FIGURES)
+		distance_between_figures -= DELTA_DISTANCE_BETWEEN_FIGURES;
+		break;
+	default:
+		for (int n = 0; n < 500; n++)
+		{
+			if (key == n)
+			{
+				std::cout << "Normal: " << key << " Number: " << n << std::endl;
+			}
+		}
 		break;
 	}
 }
 
 void press_up_normal_key(unsigned char key, int mouse_x_position, int mouse_y_position)
 {
+	normal_key_number = 0;
 	switch (key)
 	{
 	case 'a':
 	case 'd':
+	case 244:
+	case 226:
 		move_x = 0;
 		move_z = 0;
 		break;
 	case 'e':
 	case 'q':
+	case 243:
+	case 233:
 		move_y = 0;
 		break;
 	case 's':
 	case 'w':
+	case 251:
+	case 246:
 		move_x = 0;
 		move_z = 0;
 		break;
 	}
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
 }
+
+//MOUSE's FUNCTIONS...
 
 void mouse_func(int button, int buttom_state, int mouse_x_position, int mouse_y_position)
 {
@@ -1457,6 +1659,8 @@ void motion_passive_func(int mouse_x_position, int mouse_y_position)
 
 int main(int argc, char** argv)//* int argc - количество аргументов | char** argv - их описание в виде указателя на строку
 {
+	gamespase1->MoveWhite();
+
 	glEnable(GL_DEPTH);
 
 	glutInit(&argc, argv);
