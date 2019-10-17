@@ -31,7 +31,7 @@ bool GameSpace::CanGo(int number, int end_number)
 bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 {
 
-	int x_start = number % *lenght , y_start = (number / *lenght ) % *weight, z_start = (number / (*lenght * *weight)) % *height;
+	int x_start = number % *lenght, y_start = (number / *lenght) % *weight, z_start = (number / (*lenght * *weight)) % *height;
 	switch (points[number])
 	{
 	case 1://WHITE king
@@ -116,7 +116,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case 10://WHITE pawn
 	{
-		if (x_start - x_end == -1 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == -2 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || (x_start - x_end == 1 && (abs(y_start - y_end) == -1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] < 0))
+		if (x_start - x_end == -1 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || start_points[x_start + y_start * *lenght + z_start * *lenght * *weight] && x_start - x_end == -2 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || (x_start - x_end == 1 && (abs(y_start - y_end) == -1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght + z_end * *lenght * *weight] < 0))
 		{// can go only forvard OR eat figures on diagonals OR doouble diagonals
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -178,7 +178,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 		if (abs(x_start - x_end) == 2 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 2 && abs(z_start - z_end) == 1 || abs(x_start - x_end) == 1 && abs(y_start - y_end) == 1 && abs(z_start - z_end) == 2)
 		{//it is knight diagonal
-			if (points[x_end + y_end * *lenght  + z_end * *lenght * *weight] >= 0)
+			if (points[x_end + y_end * *lenght + z_end * *lenght * *weight] >= 0)
 			{
 				return true;
 			}
@@ -208,7 +208,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case -10://BLACK pawn
 	{
-		if (x_start - x_end == 1 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || start_points[x_start + y_start * *lenght  + z_start * *lenght * *weight] && x_start - x_end == 2 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght  + z_end * *lenght * *weight] > 0))
+		if (x_start - x_end == 1 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || start_points[x_start + y_start * *lenght + z_start * *lenght * *weight] && x_start - x_end == 2 && y_start == y_end && z_start == z_end && points[x_end + y_end * *lenght + z_end * *lenght * *weight] == 0 || (x_start - x_end == 1 && (abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1) && points[x_end + y_end * *lenght + z_end * *lenght * *weight] > 0))
 		{// can go only forvard OR eat figures on diagonals OR doouble diagonals
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -298,7 +298,17 @@ int GameSpace::GetPoint(int number)
 
 int GameSpace::GetPoint(int x, int y, int z)
 {
-	return points[x + y * *lenght  + z * *lenght * *weight];
+	return points[x + y * *lenght + z * *lenght * *weight];
+}
+
+bool GameSpace::IsMoveWhite()
+{
+	return *white_move;
+}
+
+bool GameSpace::IsMoveBlack()
+{
+	return *black_move;
 }
 
 bool GameSpace::Mat(bool to_black)
@@ -357,21 +367,21 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int end_numb
 
 bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end)
 {
-	if (x_end > *lenght - 1 || x_end < 0 || y_end > *weight - 1 || y_end < 0 || z_end > *height - 1 || z_end < 0 || x_start > *lenght - 1 || x_start < 0 || y_start > *weight - 1 || y_start < 0 || z_start > *height - 1 || z_start < 0 || (x_start == x_end && y_start == y_end && z_start == z_end))
+	if (x_end > * lenght - 1 || x_end < 0 || y_end > * weight - 1 || y_end < 0 || z_end > * height - 1 || z_end < 0 || x_start > * lenght - 1 || x_start < 0 || y_start > * weight - 1 || y_start < 0 || z_start > * height - 1 || z_start < 0 || (x_start == x_end && y_start == y_end && z_start == z_end))
 	{//(in space ) AND ( start != end )
 		return false;
 	}
-	else if (*white_move && points[x_start + y_start * *lenght + z_start * *lenght * *weight] <= 0 || *black_move && points[x_start + y_start * *lenght  + z_start * *lenght * *weight] >= 0)
+	else if (*white_move && points[x_start + y_start * *lenght + z_start * *lenght * *weight] <= 0 || *black_move && points[x_start + y_start * *lenght + z_start * *lenght * *weight] >= 0)
 	{
 		return false;
 	}
-	switch (points[x_start + y_start * *lenght  + z_start * *lenght * *weight])
+	switch (points[x_start + y_start * *lenght + z_start * *lenght * *weight])
 	{
 	case 1://WHITE king
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * *lenght  + z_start * *lenght * *weight] = 0;
+			points[x_start + y_start * *lenght + z_start * *lenght * *weight] = 0;
 			for (int number = 0; number < *lenght * *weight * *height; number++)
 			{
 				if (points[number] < 0 && CanGo(number, x_end, y_end, z_end))
@@ -379,14 +389,14 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 					return false;
 				}
 			}
-			points[x_start + y_start * *lenght  + z_start * *lenght * *weight] = 1;
+			points[x_start + y_start * *lenght + z_start * *lenght * *weight] = 1;
 			return true;
 		}
 		break;
 	}
 	case 2://WHITE super queen
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -394,7 +404,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case 3://WHITE queen diagonal
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -402,7 +412,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case 4://WHITE queen
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -410,7 +420,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case 5://WHITE bishop diadonal
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -418,7 +428,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case 6://WHIT bishop
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -426,7 +436,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case 7://WHITE knight diagonal
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -434,7 +444,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case 8://WHITE knght
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -442,7 +452,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case 9://WHITE rook
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -450,7 +460,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case 10://WHITE pawn
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			if (!Check(x_start, y_start, z_start, x_end, y_end, z_end, true))
 			{
@@ -461,9 +471,9 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case -1://BLACK king
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
-			points[x_start + y_start * *lenght  + z_start * *lenght * *weight] = 0;
+			points[x_start + y_start * *lenght + z_start * *lenght * *weight] = 0;
 			for (int number = 0; number < *lenght * *weight * *height; number++)
 			{
 				if (points[number] > 0 && CanGo(number, x_end, y_end, z_end))
@@ -471,14 +481,14 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 					return false;
 				}
 			}
-			points[x_start + y_start * *lenght  + z_start * *lenght * *weight] = -1;
+			points[x_start + y_start * *lenght + z_start * *lenght * *weight] = -1;
 			return true;
 		}
 		break;
 	}
 	case -2://BLACK super queen
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -486,7 +496,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case -3://BLACK queen diagonal
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -494,7 +504,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case -4://BLACK queen
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -502,7 +512,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case -5://BLACK bishop diagonal
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -510,7 +520,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case -6://BLACK bishop
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -518,7 +528,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case -7://BLACK knight diagonal
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -526,7 +536,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case -8://BLACK khight
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -534,7 +544,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case -9://BLACK rook
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			return !Check(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -542,7 +552,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 	}
 	case -10://BLACK pawn
 	{
-		if (CanGo(x_start + y_start * *lenght  + z_start * *lenght * *weight, x_end, y_end, z_end))
+		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *weight, x_end, y_end, z_end))
 		{
 			if (!Check(x_start, y_start, z_start, x_end, y_end, z_end, false))
 			{
@@ -569,8 +579,8 @@ void GameSpace::ReplasePoints(int number1, int number2)
 void GameSpace::ReplasePoints(int x1, int y1, int z1, int number2)
 {
 	int* point = new int;
-	*point = points[x1 + y1 * *lenght  + z1 * *lenght * *weight];
-	points[x1 + y1 * *lenght  + z1 * *lenght * *weight] = points[number2];
+	*point = points[x1 + y1 * *lenght + z1 * *lenght * *weight];
+	points[x1 + y1 * *lenght + z1 * *lenght * *weight] = points[number2];
 	points[number2] = *point;
 	delete point;
 }
@@ -578,9 +588,9 @@ void GameSpace::ReplasePoints(int x1, int y1, int z1, int number2)
 void GameSpace::ReplasePoints(int x1, int y1, int z1, int x2, int y2, int z2)
 {
 	int* point = new int;
-	*point = points[x1 + y1 * *lenght  + z1 * *lenght * *weight];
-	points[x1 + y1 * *lenght  + z1 * *lenght * *weight] = points[x2 + y2 * *lenght  + z2 * *lenght * *weight];
-	points[x2 + y2 * *lenght  + z2 * *lenght * *weight] = *point;
+	*point = points[x1 + y1 * *lenght + z1 * *lenght * *weight];
+	points[x1 + y1 * *lenght + z1 * *lenght * *weight] = points[x2 + y2 * *lenght + z2 * *lenght * *weight];
+	points[x2 + y2 * *lenght + z2 * *lenght * *weight] = *point;
 	delete point;
 }
 
@@ -591,7 +601,7 @@ void GameSpace::SetPoint(int number, int number_of_figure)
 
 void GameSpace::SetPoint(int x, int y, int z, int number_of_figure)
 {
-	points[x + y * *lenght  + z * *lenght * *weight] = number_of_figure;
+	points[x + y * *lenght + z * *lenght * *weight] = number_of_figure;
 }
 
 void GameSpace::Show(int plane_z, bool show_cordinats_vectors)
@@ -604,17 +614,17 @@ void GameSpace::Show(int plane_z, bool show_cordinats_vectors)
 		{
 			for (int y = 0; y < *weight; y++)
 			{
-				if ((points[x + y * *lenght  + plane_z * *lenght * *weight] < 0 && points[x + y * *lenght  + plane_z * *lenght * *weight] > -10) || points[x + y * *lenght  + plane_z * *lenght * *weight] > 9)
+				if ((points[x + y * *lenght + plane_z * *lenght * *weight] < 0 && points[x + y * *lenght + plane_z * *lenght * *weight] > -10) || points[x + y * *lenght + plane_z * *lenght * *weight] > 9)
 				{
-					cout << " " << points[x + y * *lenght  + plane_z * *lenght * *weight] << " ";
+					cout << " " << points[x + y * *lenght + plane_z * *lenght * *weight] << " ";
 				}
-				else if (points[x + y * *lenght  + plane_z * *lenght * *weight] < -9)
+				else if (points[x + y * *lenght + plane_z * *lenght * *weight] < -9)
 				{
-					cout << points[x + y * *lenght  + plane_z * *lenght * *weight] << " ";
+					cout << points[x + y * *lenght + plane_z * *lenght * *weight] << " ";
 				}
 				else
 				{
-					cout << "  " << points[x + y * *lenght  + plane_z * *lenght * *weight] << " ";
+					cout << "  " << points[x + y * *lenght + plane_z * *lenght * *weight] << " ";
 				}
 			}
 			if (show_cordinats_vectors)
