@@ -25,6 +25,10 @@ int window_x_left_up_position = 400, window_y_left_up_position = 400;
 
 int cell_x_position = 4, cell_y_position = 4, cell_z_position = 4;
 
+int x_target_position = 0, y_target_position = 0, z_target_position = 0;
+
+int x_figure_position = 0, y_figure_position = 0, z_figure_position = 0;
+
 int special_key_number = 0, normal_key_number = 0;
 
 short move_x = 0, move_y = 0, move_z = 0;//возможность перемещения по оси -1 - REVERS; 0 - STOP; 1 - FORVARD
@@ -49,10 +53,10 @@ bool forvard_backvard = true;
 
 bool show_lines = false, draw_all_variants = true;
 
-bool game_go_automatic = false, next_way = false;
-
 bool bottoms[100];
 bool mouse_motion = false;
+
+bool target_figure = false, draw_target_figure_all_variants = false;
 
 
 
@@ -137,9 +141,23 @@ void DrawCube()
 void DrawCell()
 {
 	const float rang = 0.3f;
+
+	if (target_figure && gamespase1->IsMoveWhite())
+	{
+		glColor3f(0.8f, 0.6f, 0.8f);
+	}
+	else if (target_figure && gamespase1->IsMoveBlack())
+	{
+		glColor3f(0.2f, 0.4f, 0.2f);
+	}
+	else
+	{
+		glColor3f(0.45f, 0.55f, 0.45f);
+	}
+
 	glPushMatrix();
 	glTranslatef(cell_x_position * distance_between_figures, cell_y_position * distance_between_figures, cell_z_position * distance_between_figures);
-	DrawCube(0, 0, 0, rang);
+	glutSolidCube(rang);
 	glPopMatrix();
 }
 
@@ -1182,9 +1200,31 @@ void DrawAllVariants()
 	}
 }
 
+void DrawAllVariants(int x_position, int y_position, int z_position, float red_pomponent, float blue_pomponent, float green_pomponent)
+{
+	for (int n = 0; n < list->GetElement(0) * list->GetElement(1) * list->GetElement(2); n++)
+	{
+		if (gamespase1->MeetGameRule(x_position, y_position, z_position, n))
+		{
+			glPushMatrix();
+			glTranslatef(n % list->GetElement(0) * distance_between_figures, (n / list->GetElement(0)) % list->GetElement(1) * distance_between_figures, (n / (list->GetElement(0) * list->GetElement(1))) % list->GetElement(2) * distance_between_figures);
+			glColor3f(red_pomponent, blue_pomponent, green_pomponent);
+			glutSolidCube(0.2f);
+			glPopMatrix();
+		}
+	}
+}
+
 void DrawSceneGrid()
 {
-	glColor3f(0.0f, 1.0f, 0.0f);
+	if (gamespase1->IsMoveBlack())
+	{
+		glColor3f(0.0f, 0.0f, 0.0f);
+	}
+	else if(gamespase1->IsMoveWhite())
+	{
+		glColor3f(1.0f, 1.0f, 1.0f);
+	}
 	for (int x = 0; x <= list->GetElement(0); x++)
 	{
 		for (int y = 0; y <= list->GetElement(1); y++)
@@ -1229,10 +1269,6 @@ void DrawSceneGrid()
 void DrawAll()
 {
 	DrawAllFigures();
-	if (!game_go_automatic)
-	{
-		DrawCell();
-	}
 	if (draw_all_variants)
 	{
 		DrawAllVariants();
@@ -1251,41 +1287,15 @@ void DrawAll()
 		show_lines = true;
 		break;
 	}
-	if (game_go_automatic)
+	if (draw_target_figure_all_variants && gamespase1->IsMoveBlack())
 	{
-		while (!next_way)
-		{
-			srand(time(NULL));
-			int r1 = rand() % (list->GetElement(0) * list->GetElement(1) * list->GetElement(2));
-			srand(time(NULL));
-			int r2 = rand() % (list->GetElement(0) * list->GetElement(1) * list->GetElement(2));
-			if (gamespase1->MeetGameRule(r1, r2))
-			{
-				next_way = true;
-				gamespase1->ReplasePoints(r1, r2);
-				if (gamespase1->IsMoveWhite())
-				{
-					gamespase1->MoveBlack();
-				}
-				if (gamespase1->IsMoveBlack())
-				{
-					gamespase1->MoveWhite();
-				}
-				if (gamespase1->Mat(true))
-				{
-					std::cout << "White win!" << std::endl;
-					game_go_automatic = false;
-				}
-				if (gamespase1->Mat(false))
-				{
-					std::cout << "Black win!" << std::endl;
-					game_go_automatic = false;
-				}
-			}
-			std::cout << r1 << ' ' << r2 << std::endl;
-		}
-		next_way = false;
+		DrawAllVariants(x_figure_position, y_figure_position, z_figure_position, 0.1f, 0.1f, 0.1f);
 	}
+	else if (draw_target_figure_all_variants)
+	{
+		DrawAllVariants(x_figure_position, y_figure_position, z_figure_position, 0.9f, 0.9f, 0.9f);
+	}
+	DrawCell();
 }
 
 void draw_poligon()
@@ -1335,8 +1345,7 @@ void render_camera()
 
 void render_Scene()
 {
-
-	glClearColor(0.4, 0.4, 1.0, 1.0);// цвет фонa
+	glClearColor(0.4f, 0.4f, 1.0f, 1.0f);// цвет фонa
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -1438,9 +1447,6 @@ void press_special_key(int key, int mouse_x_position, int mouse_y_position)
 			cell_z_position--;
 		}
 		break;
-	case GLUT_KEY_END:
-		game_go_automatic = true;
-		break;
 	default:
 		std::cout << "Special: " << key << std::endl;
 		break;
@@ -1460,15 +1466,38 @@ void press_normal_key(unsigned char key, int mouse_x_position, int mouse_y_posit
 	switch (key)
 	{
 	case 13://Enter
-		if (game_go_automatic)
+		if (!target_figure && (gamespase1->GetPoint(cell_x_position, cell_y_position, cell_z_position) > 0 && gamespase1->IsMoveWhite() || gamespase1->GetPoint(cell_x_position, cell_y_position, cell_z_position) < 0 && gamespase1->IsMoveBlack()))
 		{
-			game_go_automatic = false;
-			draw_all_variants = true;
+			x_figure_position = cell_x_position;
+			y_figure_position = cell_y_position;
+			z_figure_position = cell_z_position;
+			draw_target_figure_all_variants = true;
+			target_figure = true;
+		}
+		else if (target_figure && x_target_position == cell_x_position && y_target_position == cell_y_position && z_target_position == cell_z_position)
+		{
+			draw_target_figure_all_variants = false;
+			target_figure = false;
+		}
+		else if(gamespase1->MeetGameRule(x_figure_position, y_figure_position, z_figure_position, cell_x_position, cell_y_position, cell_z_position))
+		{
+			gamespase1->ReplasePoints(cell_x_position, cell_y_position, cell_z_position, x_figure_position, y_figure_position, z_figure_position);
+			gamespase1->SetPoint(x_figure_position, y_figure_position, z_figure_position, 0);
+			if (gamespase1->IsMoveWhite())
+			{
+				gamespase1->MoveBlack();
+			}
+			else
+			{
+				gamespase1->MoveWhite();
+			}
+			draw_target_figure_all_variants = false;
+			target_figure = false;
 		}
 		else
 		{
-			game_go_automatic = true;
-			draw_all_variants = false;
+			draw_target_figure_all_variants = false;
+			target_figure = false;
 		}
 		break;
 	case 27://Esc
