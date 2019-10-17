@@ -2,10 +2,10 @@
 #include<string>
 #include<random>
 #include<time.h>
-#include "List.h"
-#include "List.cpp"
-#include "GameSpace.h"
-#include "GameSpace.cpp"
+#include "Libraries/List.h"
+#include "Libraries/List.cpp"
+#include "Libraries/GameSpace.h"
+#include "Libraries/GameSpace.cpp"
 #include <GL/glut.h>
 
 List* list = new List(1);
