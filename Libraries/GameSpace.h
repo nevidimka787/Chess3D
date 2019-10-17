@@ -32,8 +32,8 @@ public:
 private:
 
 	int* lenght = new int;
-	int* weight = new int;
-	int* height = new int;
+	int* wight = new int;
+	int* hight = new int;
 	int* type = new int; //lenght = X; weight = Y; height = Z;
 	int* points = new int[512 * 512 * 512];//(X, Y, Z) == points[X + Y * 8 + Z * 64]  start = (0, 0, 0)
 	bool* start_points = new bool[512 * 512 * 512];
