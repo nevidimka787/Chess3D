@@ -12,6 +12,8 @@ public:
 	bool Check(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end, bool to_white);//Check weel be after move.
 	int GetPoint(int number);//Take information about indicated position on line.
 	int GetPoint(int x, int y, int z);//Take information about indicated position.
+	bool IsMoveWhite();//White can move.
+	bool IsMoveBlack();//Black can move.
 	bool Mat(bool to_black);//If parametr "to_black" is false, function verify mat to white party.
 	void MoveWhite();//White party is moving now.
 	void MoveBlack();//Black party is moving now.
