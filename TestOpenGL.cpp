@@ -7,7 +7,7 @@
 #include "Libraries/GameSpace.h"
 #include "Libraries/GameSpace.cpp"
 #include <GL/glut.h>//nupengl.core
-
+//
 List* list = new List(1);
 GameSpace * gamespase1 = new GameSpace(*list);
 
