@@ -1634,6 +1634,7 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 		distance_between_figures += DELTA_DISTANCE_BETWEEN_FIGURES;
 		break;
 	case '-':
+	case '_':
 		if (distance_between_figures > MIN_DISTANCE_BETWEEN_FIGURES)
 		distance_between_figures -= DELTA_DISTANCE_BETWEEN_FIGURES;
 		break;
