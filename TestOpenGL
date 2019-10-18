@@ -158,6 +158,49 @@ void DrawCell()
 	glPushMatrix();
 	glTranslatef(cell_x_position * distance_between_figures, cell_y_position * distance_between_figures, cell_z_position * distance_between_figures);
 	glutSolidCube(rang);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	if (show_lines)
+	{
+		glBegin(GL_LINES);
+		glVertex3f(-rang * 0.51f, -rang * 0.51f, -rang * 0.51f);
+		glVertex3f(-rang * 0.51f, -rang * 0.51f, rang * 0.51f);
+
+		glVertex3f(rang * 0.51f, -rang * 0.51f, -rang * 0.51f);
+		glVertex3f(rang * 0.51f, -rang * 0.51f, rang * 0.51f);
+
+		glVertex3f(-rang * 0.51f, rang * 0.51f, -rang * 0.51f);
+		glVertex3f(-rang * 0.51f, rang * 0.51f, rang * 0.51f);
+
+		glVertex3f(rang * 0.51f, rang * 0.51f, -rang * 0.51f);
+		glVertex3f(rang * 0.51f, rang * 0.51f, rang * 0.51f);
+
+
+		glVertex3f(-rang * 0.51f, -rang * 0.51f, -rang * 0.51f);
+		glVertex3f(-rang * 0.51f, rang * 0.51f, -rang * 0.51f);
+
+		glVertex3f(rang * 0.51f, -rang * 0.51f, -rang * 0.51f);
+		glVertex3f(rang * 0.51f, rang * 0.51f, -rang * 0.51f);
+
+		glVertex3f(-rang * 0.51f, -rang * 0.51f, rang * 0.51f);
+		glVertex3f(-rang * 0.51f, rang * 0.51f, rang * 0.51f);
+
+		glVertex3f(rang * 0.51f, -rang * 0.51f, rang * 0.51f);
+		glVertex3f(rang * 0.51f, rang * 0.51f, rang * 0.51f);
+
+
+		glVertex3f(-rang * 0.51f, -rang * 0.51f, -rang * 0.51f);
+		glVertex3f(rang * 0.51f, -rang * 0.51f, -rang * 0.51f);
+
+		glVertex3f(-rang * 0.51f, rang * 0.51f, -rang * 0.51f);
+		glVertex3f(rang * 0.51f, rang * 0.51f, -rang * 0.51f);
+
+		glVertex3f(-rang * 0.51f, -rang * 0.51f, rang * 0.51f);
+		glVertex3f(rang * 0.51f, -rang * 0.51f, rang * 0.51f);
+
+		glVertex3f(-rang * 0.51f, rang * 0.51f, rang * 0.51f);
+		glVertex3f(rang * 0.51f, rang * 0.51f, rang * 0.51f);
+		glEnd();
+	}
 	glPopMatrix();
 }
 
