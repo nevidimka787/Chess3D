@@ -1298,7 +1298,7 @@ void DrawAll()
 	DrawCell();
 }
 
-void draw_poligon()
+void DrawPoligon()
 {
 	glColor3f(0.2f, 0.9f, 0.2f);//Установка цвета фигуры.
 
@@ -1312,9 +1312,7 @@ void draw_poligon()
 	glVertex3f(100.0f, -4.0f, 100.0f);
 }
 
-
-
-void recalculate_camera()
+void RecalculateCamera()
 {
 	angle_xy += d_angle_xy;
 	angle_xz += d_angle_xz;
@@ -1335,15 +1333,15 @@ void recalculate_camera()
 
 }
 
-void render_camera()
+void RenderCamera()
 {
-	recalculate_camera();
+	RecalculateCamera();
 	gluLookAt(x, y, z,
 		x + lx, y + ly, z + lz,
 		0.0f, 1.0f, 0.0f);// установка камеры
 }
 
-void render_Scene()
+void RenderScene()
 {
 	glClearColor(0.4f, 0.4f, 1.0f, 1.0f);// цвет фонa
 
@@ -1353,7 +1351,7 @@ void render_Scene()
 
 	glLoadIdentity();// обнуление трансформации
 
-	render_camera();
+	RenderCamera();
 
 	DrawAll();
 
@@ -1369,7 +1367,7 @@ void render_Scene()
 	mouse_motion = false;
 }
 
-void changeSize(int window_wight, int window_hight)
+void ChangeSize(int window_wight, int window_hight)
 {
 
 	// предупредим деление на ноль
@@ -1399,7 +1397,7 @@ void changeSize(int window_wight, int window_hight)
 
 //KEIS' FUNCTIONS...
 
-void press_special_key(int key, int mouse_x_position, int mouse_y_position)
+void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 {
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 	special_key_number = key;
@@ -1453,13 +1451,13 @@ void press_special_key(int key, int mouse_x_position, int mouse_y_position)
 	}
 }
 
-void press_up_special_key(int key, int mouse_x_position, int mouse_y_position)
+void PressUpSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 {
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
 	special_key_number = 0;
 }
 
-void press_normal_key(unsigned char key, int mouse_x_position, int mouse_y_position)
+void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_position)
 {
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 	normal_key_number = key;
@@ -1702,16 +1700,16 @@ int main(int argc, char** argv)//* int argc - количество аргуме�
 	glTranslatef(1.0f, 1.0f, 1.0f);
 	glPopMatrix();
 
-	glutDisplayFunc(render_Scene);
+	glutDisplayFunc(RenderScene);
 
-	glutReshapeFunc(changeSize);// регистрирует для GLUT функцию обратного вызова
+	glutReshapeFunc(ChangeSize);// регистрирует для GLUT функцию обратного вызова
 
-	glutIdleFunc(render_Scene);// регистрирует функцию обратного вызова, которая будет вызываться когда само приложение находится в режиме ожидания
+	glutIdleFunc(RenderScene);// регистрирует функцию обратного вызова, которая будет вызываться когда само приложение находится в режиме ожидания
 
-	glutKeyboardFunc(press_normal_key);
+	glutKeyboardFunc(PressNormalKey);
 	glutKeyboardUpFunc(press_up_normal_key);
-	glutSpecialFunc(press_special_key);
-	glutSpecialUpFunc(press_up_special_key);// клавиатура
+	glutSpecialFunc(PressSpecialKey);
+	glutSpecialUpFunc(PressUpSpecialKey);// клавиатура
 
 	glutMouseFunc(mouse_func);
 	glutMotionFunc(motion_func);
