@@ -347,6 +347,7 @@ void DrawBishopDiagonal(bool white, float figure_size)
 
 void DrawBishop(bool white, float figure_size)
 {
+	const double i = 0.5, scale = 1;
 	if (white)
 	{
 		glColor3f(0.9f, 0.9f, 0.9f);
@@ -355,9 +356,28 @@ void DrawBishop(bool white, float figure_size)
 	{
 		glColor3f(0.1f, 0.1f, 0.1f);
 	}
+
 	glBegin(GL_TRIANGLES);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * (cos(i) + scale), figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i), figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i), figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i), figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i), figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i), figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(figure_size * cos(i), figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i), figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i), figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
 	glEnd();
-	DrawCube(0, 0, 0, figure_size);
+	glPopMatrix();
+
 	if (show_lines)
 	{
 		if (white)
@@ -2292,6 +2312,7 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl
 			<< "cell_x = " << cell_x_position << '	' << "cell_y = " << cell_y_position << '	' << "cell_z = " << cell_z_position << std::endl
 			<< "grid_number " << draw_grid << std::endl;
+		gamespase1->Show(4, false);
 		break;
 	case '=':
 	case '+':

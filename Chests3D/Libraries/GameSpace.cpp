@@ -40,7 +40,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 	case 1://WHITE king
 	{
-		if (abs(x_start - x_end) == 1 || abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1)
+		if (abs(x_start - x_end) == 1 && y_start == y_end && z_start == z_end || abs(y_start - y_end) == 1 && z_start == z_end && x_start == x_end || abs(z_start - z_end) == 1 && x_start == x_end && y_start == y_end)
 		{//can go on the one point in all sides
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -128,7 +128,7 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case -1://BLACK king
 	{
-		if (abs(x_start - x_end) == 1 || abs(y_start - y_end) == 1 || abs(z_start - z_end) == 1)
+		if (abs(x_start - x_end) == 1 && y_start == y_end && z_start == z_end || abs(y_start - y_end) == 1 && z_start == z_end && x_start == x_end || abs(z_start - z_end) == 1 && x_start == x_end && y_start == y_end)
 		{//can go on the one point in all sides
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -390,6 +390,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			{
 				if (points[number] < 0 && CanGo(number, x_end, y_end, z_end))
 				{//no shakh
+					points[x_start + y_start * *lenght + z_start * *lenght * *wight] = 1;
 					return false;
 				}
 			}
@@ -482,6 +483,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 			{
 				if (points[number] > 0 && CanGo(number, x_end, y_end, z_end))
 				{//no shakh
+					points[x_start + y_start * *lenght + z_start * *lenght * *wight] = 1;
 					return false;
 				}
 			}

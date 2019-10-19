@@ -1,3 +1,3 @@
-﻿  List.cpp
-C:\Users\User\Documents\git hub\Chess3D\Chests3D\Libraries\List.cpp(172): warning C4715: List::GetElement: значение возвращается не при всех путях выполнения
+﻿  GameSpace.cpp
+C:\Users\User\Documents\git hub\Chess3D\Chests3D\Libraries\GameSpace.cpp(574): warning C4715: GameSpace::MeetGameRule: значение возвращается не при всех путях выполнения
   Chests3D.vcxproj -> C:\Users\User\Documents\git hub\Chess3D\x64\Debug\Chests3D.exe
