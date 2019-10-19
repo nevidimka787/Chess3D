@@ -1,6 +1,7 @@
-#pragma once
-
+#ifndef LIST_H
+#define LIST_H
 #include"List.h"
+#endif
 
 class GameSpace
 {

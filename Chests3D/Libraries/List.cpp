@@ -1,4 +1,8 @@
+#ifndef LIST_H
+#define LIST_H
 #include"List.h"
+#endif
+
 #include<iostream>
 
 using namespace std;

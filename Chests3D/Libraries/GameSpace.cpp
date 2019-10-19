@@ -1,4 +1,8 @@
+#ifndef GAME_SPACE_H
+#define GAME_SPACE_H
 #include"GameSpace.h"
+#endif
+
 #include<iostream>
 
 using namespace std;

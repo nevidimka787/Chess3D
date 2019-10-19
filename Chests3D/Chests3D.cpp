@@ -2,10 +2,17 @@
 #include<string>
 #include<random>
 #include<time.h>
+
+#ifndef LIST_H
+#define LIST_H
 #include "Libraries/List.h"
-#include "Libraries/List.cpp"
-#include "Libraries/GameSpace.h"
-#include "Libraries/GameSpace.cpp"
+#endif
+//#include "Libraries/List.cpp"
+#ifndef GAME_SPACE_H
+#define GAME_SPACE_H
+#include"Libraries/GameSpace.h"
+#endif
+//#include "Libraries/GameSpace.cpp"
 #include <GL/glut.h>//nupengl.core
 
 List* list = new List(1);
@@ -16,6 +23,8 @@ const int BLACK_KING = -1, BLACK_SUPER_QUIN = -2, BLACK_QUIN_DIAGONAL = -3, BLAC
 float distance_between_figures = 3.0f;
 
 const float DELTA_DISTANCE_BETWEEN_FIGURES = 0.5f, MAX_DISTANCE_BETWEEN_FIGURES = 10.0f, MIN_DISTANCE_BETWEEN_FIGURES = 2.0f;
+
+const float PI = 3.141592653589793;
 
 const bool WHITE = true, BLACK = false;
 
@@ -208,7 +217,7 @@ void DrawKing(bool white, float figure_size)
 {
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	DrawCube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, figure_size);
 	if (show_lines)
 	{
 		if (white)
@@ -236,7 +245,7 @@ void DrawSuperQuin(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	DrawCube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, figure_size);
 	if (show_lines)
 	{
 		if (white)
@@ -264,7 +273,7 @@ void DrawQuinDiagonal(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	DrawCube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, figure_size);
 	if (show_lines)
 	{
 		if (white)
@@ -292,7 +301,7 @@ void DrawQuin(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	DrawCube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, figure_size);
 	if (show_lines)
 	{
 		if (white)
@@ -320,7 +329,7 @@ void DrawBishopDiagonal(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	DrawCube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, figure_size);
 	if (show_lines)
 	{
 		if (white)
@@ -348,7 +357,7 @@ void DrawBishop(bool white, float figure_size)
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
-	DrawCube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, figure_size);
 	if (show_lines)
 	{
 		if (white)
@@ -374,9 +383,119 @@ void DrawKnightDiagonal(bool white, float figure_size)
 	{
 		glColor3f(0.1f, 0.1f, 0.1f);
 	}
+	const double i = 0.5;// угол отклонения от высоты
+	const double xi = 0.5;// угол отклонения от оси x
+	short forvard = 0;
+	if (white)
+	{
+		forvard = 1;
+		glColor3f(0.8f, 0.8f, 0.8f);
+	}
+	else
+	{
+		forvard = -1;
+		glColor3f(0.2f, 0.2f, 0.2f);
+	}
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
+	glRotatef(0.0, 0.0, 0.0, 0.0);
+
+	glutSolidSphere(0.25f * figure_size, figure_size * 10, figure_size * 10);
+
 	glBegin(GL_TRIANGLES);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
 	glEnd();
-	DrawCube(0, 0, 0, 1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
+	glRotatef(120, 0.0, 0.0, 1.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glEnd();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
+	glRotatef(210, xi, 0.0, 1.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glEnd();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
+	glRotatef(210, -xi, 0.0, 1.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glEnd();
+	glPopMatrix();
+
 	if (show_lines)
 	{
 		if (white)
@@ -388,7 +507,109 @@ void DrawKnightDiagonal(bool white, float figure_size)
 			glColor3f(0.8f, 0.8f, 0.8f);
 		}
 
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		glRotatef(0.0, 0.0, 0.0, 0.0);
+		glBegin(GL_LINES);
 
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		glRotatef(120, 0.0, 0.0, 1.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		glRotatef(210, xi, 0.0, 1.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		glRotatef(210, -xi, 0.0, 1.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
 	}
 }
 
@@ -405,7 +626,7 @@ void DrawKnight(bool white, float figure_size)
 	glBegin(GL_TRIANGLES);
 
 	glEnd();
-	DrawCube(0, 0, 0, 1);
+	DrawCube(0, 0, 0, figure_size);
 	if (show_lines)
 	{
 		if (white)
@@ -1162,10 +1383,10 @@ void DrawFigure(int figure_type, float figure_size)
 		DrawBishop(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_KNIGHT_DIAGONAL:
-		DrawKnightDiagonal(WHITE, figure_size * 1.0f);
+		DrawKnightDiagonal(WHITE, figure_size * 0.5f);
 		break;
 	case WHITE_KNIGHT:
-		DrawKnight(WHITE, figure_size * 1.0f);
+		DrawKnight(WHITE, figure_size * 0.5f);
 		break;
 	case WHITE_ROOK:
 		DrawRook(WHITE, figure_size * 0.25f);
@@ -1192,10 +1413,10 @@ void DrawFigure(int figure_type, float figure_size)
 		DrawBishop(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_KNIGHT_DIAGONAL:
-		DrawKnightDiagonal(BLACK, figure_size * 1.0f);
+		DrawKnightDiagonal(BLACK, figure_size * 0.5f);
 		break;
 	case BLACK_KNIGHT:
-		DrawKnight(BLACK, figure_size * 1.0f);
+		DrawKnight(BLACK, figure_size * 0.5f);
 		break;
 	case BLACK_ROOK:
 		DrawRook(BLACK, figure_size * 0.25f);
@@ -1359,6 +1580,14 @@ void RecalculateCamera()
 {
 	angle_xy += d_angle_xy;
 	angle_xz += d_angle_xz;
+	if (angle_xy > 1.57077)
+	{
+		angle_xy = 1.57077;
+	}
+	else if (angle_xy < -1.57077)
+	{
+		angle_xy = -1.57077;
+	}
 	lx = sin(angle_xz) * cos(angle_xy);
 	ly = sin(angle_xy);
 	lz = -cos(angle_xz) * cos(angle_xy);
@@ -1650,7 +1879,7 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 	}
 }
 
-void press_up_normal_key(unsigned char key, int mouse_x_position, int mouse_y_position)
+void PressUpNormalKey(unsigned char key, int mouse_x_position, int mouse_y_position)
 {
 	normal_key_number = 0;
 	switch (key)
@@ -1681,7 +1910,7 @@ void press_up_normal_key(unsigned char key, int mouse_x_position, int mouse_y_po
 
 //MOUSE's FUNCTIONS...
 
-void mouse_func(int button, int buttom_state, int mouse_x_position, int mouse_y_position)
+void MouseFunc(int button, int buttom_state, int mouse_x_position, int mouse_y_position)
 {
 	if (buttom_state == GLUT_DOWN)
 	{
@@ -1711,7 +1940,7 @@ void mouse_func(int button, int buttom_state, int mouse_x_position, int mouse_y_
 	}
 }
 
-void motion_func(int mouse_x_position, int mouse_y_position)
+void MotionFunc(int mouse_x_position, int mouse_y_position)
 {
 	mouse_motion = true;
 	if (bottoms[2])
@@ -1723,7 +1952,7 @@ void motion_func(int mouse_x_position, int mouse_y_position)
 	}
 }
 
-void motion_passive_func(int mouse_x_position, int mouse_y_position)
+void MotionPassiveFunc(int mouse_x_position, int mouse_y_position)
 {
 
 }
@@ -1751,13 +1980,13 @@ int main(int argc, char** argv)//* int argc - количество аргуме�
 	glutIdleFunc(RenderScene);// регистрирует функцию обратного вызова, которая будет вызываться когда само приложение находится в режиме ожидания
 
 	glutKeyboardFunc(PressNormalKey);
-	glutKeyboardUpFunc(press_up_normal_key);
+	glutKeyboardUpFunc(PressUpNormalKey);
 	glutSpecialFunc(PressSpecialKey);
 	glutSpecialUpFunc(PressUpSpecialKey);// клавиатура
 
-	glutMouseFunc(mouse_func);
-	glutMotionFunc(motion_func);
-	glutPassiveMotionFunc(motion_passive_func);// мышь
+	glutMouseFunc(MouseFunc);
+	glutMotionFunc(MotionFunc);
+	glutPassiveMotionFunc(MotionPassiveFunc);// мышь
 
 	glutMainLoop();
 
