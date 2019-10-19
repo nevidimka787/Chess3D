@@ -421,6 +421,19 @@ void DrawKnightDiagonal(bool white, float figure_size)
 	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
 	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
 
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
 	glEnd();
 	glPopMatrix();
 
@@ -442,6 +455,19 @@ void DrawKnightDiagonal(bool white, float figure_size)
 	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
 
 	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
 	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
 	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
 
@@ -469,6 +495,19 @@ void DrawKnightDiagonal(bool white, float figure_size)
 	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
 	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
 
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
 	glEnd();
 	glPopMatrix();
 
@@ -492,6 +531,19 @@ void DrawKnightDiagonal(bool white, float figure_size)
 	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
 	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
 	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
 
 	glEnd();
 	glPopMatrix();
@@ -530,6 +582,16 @@ void DrawKnightDiagonal(bool white, float figure_size)
 		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
 		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
 
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
 		glEnd();
 		glPopMatrix();
 
@@ -555,6 +617,15 @@ void DrawKnightDiagonal(bool white, float figure_size)
 
 		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
 		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
 
 		glEnd();
 		glPopMatrix();
@@ -582,6 +653,16 @@ void DrawKnightDiagonal(bool white, float figure_size)
 		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
 		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
 
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
 		glEnd();
 		glPopMatrix();
 
@@ -608,6 +689,16 @@ void DrawKnightDiagonal(bool white, float figure_size)
 		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
 		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
 
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, 0.0, 0.0);
+		glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
 		glEnd();
 		glPopMatrix();
 	}
@@ -615,18 +706,219 @@ void DrawKnightDiagonal(bool white, float figure_size)
 
 void DrawKnight(bool white, float figure_size)
 {
+	const double i = 0.5;// угол отклонения от высоты
+	const double xi = 0.5;// угол отклонения от оси x
+	short forvard = 0;
 	if (white)
 	{
-		glColor3f(0.9f, 0.9f, 0.9f);
+		forvard = 1;
+		glColor3f(0.8f, 0.8f, 0.8f);
 	}
 	else
 	{
-		glColor3f(0.1f, 0.1f, 0.1f);
+		forvard = -1;
+		glColor3f(0.2f, 0.2f, 0.2f);
 	}
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
+	glRotatef(0.0, 0.0, 0.0, 0.0);
+
+	glutSolidSphere(0.25f * figure_size, figure_size * 10, figure_size * 10);
+
 	glBegin(GL_TRIANGLES);
 
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
 	glEnd();
-	DrawCube(0, 0, 0, figure_size);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
+	glRotatef(120, 0.0, 0.0, 1.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glEnd();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
+	glRotatef(210, xi, 0.0, 1.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+
+	glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+	glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+	glEnd();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
+	glRotatef(210, -xi, 0.0, 1.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+	glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+
+	glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+	glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+	glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+	glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+	glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+	glEnd();
+	glPopMatrix();
+
 	if (show_lines)
 	{
 		if (white)
@@ -638,7 +930,185 @@ void DrawKnight(bool white, float figure_size)
 			glColor3f(0.8f, 0.8f, 0.8f);
 		}
 
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		glRotatef(0.0, 0.0, 0.0, 0.0);
+		glBegin(GL_LINES);
 
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		glRotatef(120, 0.0, 0.0, 1.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		glRotatef(210, xi, 0.0, 1.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+
+		glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+		glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		glRotatef(210, -xi, 0.0, 1.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(-i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+
+		glVertex3f(figure_size * cos(-i) * forvard, figure_size * sin(-i) * 0.5, figure_size * sin(i) * sqrt(3) / 2);
+		glVertex3f(figure_size * cos(i) * forvard, figure_size * sin(i), 0);
+
+
+		glVertex3f(figure_size* cos(i)* forvard, figure_size* sin(i), 0);
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+		glVertex3f(figure_size* cos(-i)* forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(-i)* sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+
+		glVertex3f(2.0f * figure_size * cos(-i) * forvard, figure_size* sin(-i) * 0.5, figure_size* sin(i)* sqrt(3) / 2);
+		glVertex3f(2.0f * figure_size * cos(i) * forvard, figure_size* sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
 	}
 }
 
@@ -1383,10 +1853,10 @@ void DrawFigure(int figure_type, float figure_size)
 		DrawBishop(WHITE, figure_size * 1.0f);
 		break;
 	case WHITE_KNIGHT_DIAGONAL:
-		DrawKnightDiagonal(WHITE, figure_size * 0.5f);
+		DrawKnightDiagonal(WHITE, figure_size * 0.6f);
 		break;
 	case WHITE_KNIGHT:
-		DrawKnight(WHITE, figure_size * 0.5f);
+		DrawKnight(WHITE, figure_size * 0.6f);
 		break;
 	case WHITE_ROOK:
 		DrawRook(WHITE, figure_size * 0.25f);
@@ -1413,10 +1883,10 @@ void DrawFigure(int figure_type, float figure_size)
 		DrawBishop(BLACK, figure_size * 1.0f);
 		break;
 	case BLACK_KNIGHT_DIAGONAL:
-		DrawKnightDiagonal(BLACK, figure_size * 0.5f);
+		DrawKnightDiagonal(BLACK, figure_size * 0.56f);
 		break;
 	case BLACK_KNIGHT:
-		DrawKnight(BLACK, figure_size * 0.5f);
+		DrawKnight(BLACK, figure_size * 0.56f);
 		break;
 	case BLACK_ROOK:
 		DrawRook(BLACK, figure_size * 0.25f);
@@ -1774,60 +2244,22 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 		exit(0);
 		break;
 	case 'a':
-		forvard_backvard = false;
-		move_x = -1;
-		move_z = 1;
-		break;
-	case 'd':
-		forvard_backvard = false;
-		move_x = 1;
-		move_z = -1;
-		break;
-	case 'e':
-		move_y = 1;
-		break;
-	case 'g':
-		if (draw_grid < 3)
-		{
-			draw_grid++;
-		}
-		else
-		{
-			draw_grid = 0;
-		}
-		break;
-	case 'q':
-		move_y = -1;
-		break;
-	case 's':
-		forvard_backvard = true;
-		move_x = -1;
-		move_z = -1;
-		break;
-	case 'w':
-		forvard_backvard = true;
-		move_x = 1;
-		move_z = 1;
-		break;
-	case 'x':
-		std::cout << "x = " << x << '	' << "y = " << y << '	' << "z = " << z << std::endl
-			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl
-			<< "cell_x = " << cell_x_position << '	' << "cell_y = " << cell_y_position << '	' << "cell_z = " << cell_z_position << std::endl
-			<< "grid_number " << draw_grid << std::endl;
-		break;
 	case 244://ф a
 		forvard_backvard = false;
 		move_x = -1;
 		move_z = 1;
 		break;
+	case 'd':
 	case 226://в d
 		forvard_backvard = false;
 		move_x = 1;
 		move_z = -1;
 		break;
+	case 'e':
 	case 243://у e
 		move_y = 1;
 		break;
+	case 'g':
 	case 239://g п
 		if (draw_grid < 3)
 		{
@@ -1838,19 +2270,23 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 			draw_grid = 0;
 		}
 		break;
+	case 'q':
 	case 233://й q
 		move_y = -1;
 		break;
+	case 's':
 	case 251://ы s
 		forvard_backvard = true;
 		move_x = -1;
 		move_z = -1;
 		break;
+	case 'w':
 	case 246://ц w
 		forvard_backvard = true;
 		move_x = 1;
 		move_z = 1;
 		break;
+	case 'x':
 	case 247://ч x
 		std::cout << "x = " << x << '	' << "y = " << y << '	' << "z = " << z << std::endl
 			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl
