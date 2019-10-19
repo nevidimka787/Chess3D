@@ -58,6 +58,8 @@ float x = -4.1f, y = 17.0f, z = 9.2f;// начальная позиция кам
 
 float camera_speed = 0.2f, mouse_modification = 0.001f;// скорость 
 
+float delta_red = 0.4f, delta_green = 0.4f, delta_blue = 0.4f;//Разница цветов между фигурами
+
 bool forvard_backvard = true;
 
 bool show_lines = false, draw_all_variants = true;
@@ -66,6 +68,8 @@ bool bottoms[100];
 bool mouse_motion = false;
 
 bool target_figure = false, draw_target_figure_all_variants = false;
+
+double __angle__ = 45;
 
 
 bool CellInSpace(int x, int y, int z)
@@ -236,11 +240,11 @@ void DrawSuperQuin(bool white, float figure_size)
 {
 	if (white)
 	{
-		glColor3f(0.9f, 0.9f, 0.9f);
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
 	}
 	else
 	{
-		glColor3f(0.1f, 0.1f, 0.1f);
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
@@ -264,11 +268,11 @@ void DrawQuinDiagonal(bool white, float figure_size)
 {
 	if (white)
 	{
-		glColor3f(0.9f, 0.9f, 0.9f);
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
 	}
 	else
 	{
-		glColor3f(0.1f, 0.1f, 0.1f);
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
@@ -292,11 +296,11 @@ void DrawQuin(bool white, float figure_size)
 {
 	if (white)
 	{
-		glColor3f(0.9f, 0.9f, 0.9f);
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
 	}
 	else
 	{
-		glColor3f(0.1f, 0.1f, 0.1f);
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
 	}
 	glBegin(GL_TRIANGLES);
 	glEnd();
@@ -318,17 +322,235 @@ void DrawQuin(bool white, float figure_size)
 
 void DrawBishopDiagonal(bool white, float figure_size)
 {
+	const double i = 0.5, scale = 1.0;
 	if (white)
 	{
-		glColor3f(0.9f, 0.9f, 0.9f);
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
 	}
 	else
 	{
-		glColor3f(0.1f, 0.1f, 0.1f);
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
 	}
+
+	glPushMatrix();
+	glRotatef(__angle__, 1.0, 0.0, 0.0);
+
+	glPushMatrix();
+	glRotatef(45.0, 0.0, 1.0, 0.0);
+	glPushMatrix();
+	glRotatef(45.0, 1.0, 0.0, 0.0);
 	glBegin(GL_TRIANGLES);
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, sin(i), 0);
+	glVertex3f(scale, 0, sin(i));
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, sin(i));
+	glVertex3f(scale, -sin(i), 0);
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, -sin(i), 0);
+	glVertex3f(scale, 0, -sin(i));
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, -sin(i));
+	glVertex3f(scale, sin(i), 0);
+
 	glEnd();
-	DrawCube(0, 0, 0, figure_size);
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(135.0, 0.0, 1.0, 0.0);
+	glPushMatrix();
+	glRotatef(45.0, 1.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, sin(i), 0);
+	glVertex3f(scale, 0, sin(i));
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, sin(i));
+	glVertex3f(scale, -sin(i), 0);
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, -sin(i), 0);
+	glVertex3f(scale, 0, -sin(i));
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, -sin(i));
+	glVertex3f(scale, sin(i), 0);
+
+	glEnd();
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(-135.0, 0.0, 1.0, 0.0);
+	glPushMatrix();
+	glRotatef(45.0, 1.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, sin(i), 0);
+	glVertex3f(scale, 0, sin(i));
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, sin(i));
+	glVertex3f(scale, -sin(i), 0);
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, -sin(i), 0);
+	glVertex3f(scale, 0, -sin(i));
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, -sin(i));
+	glVertex3f(scale, sin(i), 0);
+
+	glEnd();
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(-45.0, 0.0, 1.0, 0.0);
+	glPushMatrix();
+	glRotatef(45.0, 1.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, sin(i), 0);
+	glVertex3f(scale, 0, sin(i));
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, sin(i));
+	glVertex3f(scale, -sin(i), 0);
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, -sin(i), 0);
+	glVertex3f(scale, 0, -sin(i));
+
+	glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, -sin(i));
+	glVertex3f(scale, sin(i), 0);
+
+	glEnd();
+	glPopMatrix();
+	glPopMatrix();
+
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glRotatef(-__angle__, 1.0, 0.0, 0.0);
+
+	glPushMatrix();
+	glRotatef(45.0, 0.0, 1.0, 0.0);
+	glPushMatrix();
+	glRotatef(45.0, 1.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, sin(i), 0);
+	glVertex3f(scale, 0, sin(i));
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, sin(i));
+	glVertex3f(scale, -sin(i), 0);
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, -sin(i), 0);
+	glVertex3f(scale, 0, -sin(i));
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, -sin(i));
+	glVertex3f(scale, sin(i), 0);
+
+	glEnd();
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(135.0, 0.0, 1.0, 0.0);
+	glPushMatrix();
+	glRotatef(45.0, 1.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, sin(i), 0);
+	glVertex3f(scale, 0, sin(i));
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, sin(i));
+	glVertex3f(scale, -sin(i), 0);
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, -sin(i), 0);
+	glVertex3f(scale, 0, -sin(i));
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, -sin(i));
+	glVertex3f(scale, sin(i), 0);
+
+	glEnd();
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(-135.0, 0.0, 1.0, 0.0);
+	glPushMatrix();
+	glRotatef(45.0, 1.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, sin(i), 0);
+	glVertex3f(scale, 0, sin(i));
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, sin(i));
+	glVertex3f(scale, -sin(i), 0);
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, -sin(i), 0);
+	glVertex3f(scale, 0, -sin(i));
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, -sin(i));
+	glVertex3f(scale, sin(i), 0);
+
+	glEnd();
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(-45.0, 0.0, 1.0, 0.0);
+	glPushMatrix();
+	glRotatef(45.0, 1.0, 0.0, 0.0);
+	glBegin(GL_TRIANGLES);
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, sin(i), 0);
+	glVertex3f(scale, 0, sin(i));
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, sin(i));
+	glVertex3f(scale, -sin(i), 0);
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, -sin(i), 0);
+	glVertex3f(scale, 0, -sin(i));
+
+	glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+	glVertex3f(scale, 0, -sin(i));
+	glVertex3f(scale, sin(i), 0);
+
+	glEnd();
+	glPopMatrix();
+	glPopMatrix();
+
+	glPopMatrix();
+
 	if (show_lines)
 	{
 		if (white)
@@ -340,7 +562,296 @@ void DrawBishopDiagonal(bool white, float figure_size)
 			glColor3f(0.8f, 0.8f, 0.8f);
 		}
 
+		glPushMatrix();
+		glRotatef(__angle__, 1.0, 0.0, 0.0);
 
+		glPushMatrix();
+		glRotatef(45.0, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, sin(i), 0);
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, -sin(i));
+
+
+		glVertex3f(scale, sin(i), 0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(scale, 0, sin(i));
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(scale, -sin(i), 0);
+		glVertex3f(scale, 0, -sin(i));
+
+		glVertex3f(scale, 0, -sin(i));
+		glVertex3f(scale, sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(135.0, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, sin(i), 0);
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, -sin(i));
+
+
+		glVertex3f(scale, sin(i), 0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(scale, 0, sin(i));
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(scale, -sin(i), 0);
+		glVertex3f(scale, 0, -sin(i));
+
+		glVertex3f(scale, 0, -sin(i));
+		glVertex3f(scale, sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(-135.0, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, sin(i), 0);
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(figure_size * cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, -sin(i));
+
+
+		glVertex3f(scale, sin(i), 0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(scale, 0, sin(i));
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(scale, -sin(i), 0);
+		glVertex3f(scale, 0, -sin(i));
+
+		glVertex3f(scale, 0, -sin(i));
+		glVertex3f(scale, sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(-45.0, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, -sin(i));
+
+
+		glVertex3f(scale, sin(i), 0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(scale, 0, sin(i));
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(scale, -sin(i), 0);
+		glVertex3f(scale, 0, -sin(i));
+
+		glVertex3f(scale, 0, -sin(i));
+		glVertex3f(scale, sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+		glPopMatrix();
+
+		glPopMatrix();
+
+
+		glPushMatrix();
+		glRotatef(-__angle__, 1.0, 0.0, 0.0);
+
+		glPushMatrix();
+		glRotatef(45.0, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, -sin(i));
+
+
+		glVertex3f(scale, sin(i), 0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(scale, 0, sin(i));
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(scale, -sin(i), 0);
+		glVertex3f(scale, 0, -sin(i));
+
+		glVertex3f(scale, 0, -sin(i));
+		glVertex3f(scale, sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(135.0, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, -sin(i));
+
+
+		glVertex3f(scale, sin(i), 0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(scale, 0, sin(i));
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(scale, -sin(i), 0);
+		glVertex3f(scale, 0, -sin(i));
+
+		glVertex3f(scale, 0, -sin(i));
+		glVertex3f(scale, sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(-135.0, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, -sin(i));
+
+
+		glVertex3f(scale, sin(i), 0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(scale, 0, sin(i));
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(scale, -sin(i), 0);
+		glVertex3f(scale, 0, -sin(i));
+
+		glVertex3f(scale, 0, -sin(i));
+		glVertex3f(scale, sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(-45.0, 0.0, 1.0, 0.0);
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		glBegin(GL_LINES);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(figure_size* cos(-i) + scale, 0.0, 0.0);
+		glVertex3f(scale, 0, -sin(i));
+
+
+		glVertex3f(scale, sin(i), 0);
+		glVertex3f(scale, 0, sin(i));
+
+		glVertex3f(scale, 0, sin(i));
+		glVertex3f(scale, -sin(i), 0);
+
+		glVertex3f(scale, -sin(i), 0);
+		glVertex3f(scale, 0, -sin(i));
+
+		glVertex3f(scale, 0, -sin(i));
+		glVertex3f(scale, sin(i), 0);
+
+		glEnd();
+		glPopMatrix();
+		glPopMatrix();
+
+		glPopMatrix();
 	}
 }
 
@@ -349,11 +860,11 @@ void DrawBishop(bool white, float figure_size)
 	const double i = 0.5, scale = 0.3;
 	if (white)
 	{
-		glColor3f(0.9f, 0.9f, 0.9f);
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
 	}
 	else
 	{
-		glColor3f(0.1f, 0.1f, 0.1f);
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
 	}
 
 	glPushMatrix();
@@ -1131,26 +1642,18 @@ void DrawBishop(bool white, float figure_size)
 
 void DrawKnightDiagonal(bool white, float figure_size)
 {
-	if (white)
-	{
-		glColor3f(0.9f, 0.9f, 0.9f);
-	}
-	else
-	{
-		glColor3f(0.1f, 0.1f, 0.1f);
-	}
 	const double i = 0.5;// угол отклонения от высоты
 	const double xi = 0.5;// угол отклонения от оси x
 	short forvard = 0;
 	if (white)
 	{
 		forvard = 1;
-		glColor3f(0.8f, 0.8f, 0.8f);
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
 	}
 	else
 	{
 		forvard = -1;
-		glColor3f(0.2f, 0.2f, 0.2f);
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
 	}
 
 	glPushMatrix();
@@ -1468,12 +1971,12 @@ void DrawKnight(bool white, float figure_size)
 	if (white)
 	{
 		forvard = 1;
-		glColor3f(0.8f, 0.8f, 0.8f);
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
 	}
 	else
 	{
 		forvard = -1;
-		glColor3f(0.2f, 0.2f, 0.2f);
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
 	}
 
 	glPushMatrix();
@@ -1873,11 +2376,11 @@ void DrawRook(bool white, float figure_size)
 	const double scale = 4;
 	if (white)
 	{
-		glColor3f(0.8f, 0.8f, 0.8f);
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
 	}
 	else
 	{
-		glColor3f(0.2f, 0.2f, 0.2f);
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
 	}
 
 	glPushMatrix();
@@ -2362,12 +2865,12 @@ void DrawPawn(bool white, float figure_size)
 	if (white)
 	{
 		forvard = 1;
-		glColor3f(0.8f, 0.8f, 0.8f);
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
 	}
 	else
 	{
 		forvard = -1;
-		glColor3f(0.2f, 0.2f, 0.2f);
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
 	}
 
 	glPushMatrix();
@@ -3047,7 +3550,13 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 		std::cout << "x = " << x << '	' << "y = " << y << '	' << "z = " << z << std::endl
 			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl
 			<< "cell_x = " << cell_x_position << '	' << "cell_y = " << cell_y_position << '	' << "cell_z = " << cell_z_position << std::endl
-			<< "grid_number = " << draw_grid << std::endl;
+			<< "grid_number = " << draw_grid << " angle2 = " << __angle__ << std::endl;
+		break;
+	case '2':
+		__angle__ -= 1;
+		break;
+	case '8':
+		__angle__ += 1;
 		break;
 	case '=':
 	case '+':
