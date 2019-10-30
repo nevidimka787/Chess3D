@@ -56,7 +56,7 @@ float dx = 0.0f, dy = 0.0f, dz = 0.0f;// смещения по осям
 
 float x = -4.1f, y = 17.0f, z = 9.2f;// начальная позиция камеры
 
-float camera_speed = 0.02f, mouse_modification = 0.001f;// скорость 
+float camera_speed = 0.1f, mouse_modification = 0.001f;// скорость 
 
 float delta_red = 0.4f, delta_green = 0.4f, delta_blue = 0.4f;//Разница цветов между фигурами
 
@@ -214,110 +214,6 @@ void DrawCell()
 		glEnd();
 	}
 	glPopMatrix();
-}
-
-void DrawKing(bool white, float figure_size)
-{
-	glBegin(GL_TRIANGLES);
-	glEnd();
-	DrawCube(0, 0, 0, figure_size);
-	if (show_lines)
-	{
-		if (white)
-		{
-			glColor3f(0.2f, 0.2f, 0.2f);
-		}
-		else
-		{
-			glColor3f(0.8f, 0.8f, 0.8f);
-		}
-
-
-	}
-}
-
-void DrawSuperQuin(bool white, float figure_size)
-{
-	if (white)
-	{
-		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
-	}
-	else
-	{
-		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
-	}
-	glBegin(GL_TRIANGLES);
-	glEnd();
-	DrawCube(0, 0, 0, figure_size);
-	if (show_lines)
-	{
-		if (white)
-		{
-			glColor3f(0.2f, 0.2f, 0.2f);
-		}
-		else
-		{
-			glColor3f(0.8f, 0.8f, 0.8f);
-		}
-
-
-	}
-}
-
-void DrawQuinDiagonal(bool white, float figure_size)
-{
-	if (white)
-	{
-		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
-	}
-	else
-	{
-		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
-	}
-	glBegin(GL_TRIANGLES);
-	glEnd();
-	DrawCube(0, 0, 0, figure_size);
-	if (show_lines)
-	{
-		if (white)
-		{
-			glColor3f(0.2f, 0.2f, 0.2f);
-		}
-		else
-		{
-			glColor3f(0.8f, 0.8f, 0.8f);
-		}
-
-
-	}
-}
-
-void DrawQuin(bool white, float figure_size)
-{
-	if (white)
-	{
-		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
-	}
-	else
-	{
-		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
-	}
-	glBegin(GL_TRIANGLES);
-	glEnd();
-	DrawCube(0, 0, 0, figure_size);
-	if (show_lines)
-	{
-		if (white)
-		{
-			glColor3f(0.2f, 0.2f, 0.2f);
-		}
-		else
-		{
-			glColor3f(0.8f, 0.8f, 0.8f);
-		}
-
-
-	}
 }
 
 void DrawBishopDiagonal(bool white, float figure_size)
@@ -2999,6 +2895,98 @@ void DrawPawn(bool white, float figure_size)
 	}
 }
 
+void DrawKing(bool white, float figure_size)
+{
+	if (white)
+	{
+		DrawBishopDiagonal(WHITE, figure_size);
+
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		DrawBishopDiagonal(WHITE, figure_size);
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(45.0, 0.0, 1.0, 0.0);
+		DrawBishopDiagonal(WHITE, figure_size);
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(45.0, 0.0, 0.0, 1.0);
+		DrawBishopDiagonal(WHITE, figure_size);
+		glPopMatrix();
+	}
+	else
+	{
+		DrawBishopDiagonal(BLACK, figure_size);
+
+		glPushMatrix();
+		glRotatef(45.0, 1.0, 0.0, 0.0);
+		DrawBishopDiagonal(BLACK, figure_size);
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(45.0, 0.0, 1.0, 0.0);
+		DrawBishopDiagonal(BLACK, figure_size);
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(45.0, 0.0, 0.0, 1.0);
+		DrawBishopDiagonal(BLACK, figure_size);
+		glPopMatrix();
+	}
+}
+
+void DrawSuperQuin(bool white, float figure_size)
+{
+	if (white)
+	{
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
+		DrawRook(WHITE, figure_size * 0.25f);
+		DrawBishop(WHITE, figure_size * 1.0f);
+		DrawBishopDiagonal(WHITE, figure_size * 1.0f);
+	}
+	else
+	{
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
+		DrawRook(BLACK, figure_size * 0.25f);
+		DrawBishop(BLACK, figure_size * 1.0f);
+		DrawBishopDiagonal(BLACK, figure_size * 1.0f);
+	}
+}
+
+void DrawQuinDiagonal(bool white, float figure_size)
+{
+	if (white)
+	{
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
+		DrawRook(WHITE, figure_size * 0.25f);
+		DrawBishopDiagonal(WHITE, figure_size * 1.0f);
+	}
+	else
+	{
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
+		DrawRook(BLACK, figure_size * 0.25f);
+		DrawBishopDiagonal(BLACK, figure_size * 1.0f);
+	}
+}
+
+void DrawQuin(bool white, float figure_size)
+{
+	if (white)
+	{
+		glColor3f(0.5f + delta_red, 0.5f + delta_green, 0.5f + delta_blue);
+		DrawRook(WHITE, figure_size * 0.25f);
+		DrawBishop(WHITE, figure_size * 1.0f);
+	}
+	else
+	{
+		glColor3f(0.5f - delta_red, 0.5f - delta_green, 0.5f - delta_blue);
+		DrawRook(BLACK, figure_size * 0.25f);
+		DrawBishop(BLACK, figure_size * 1.0f);
+	}
+}
+
 void DrawFigure(int figure_type, float figure_size)
 {
 	switch (figure_type)
@@ -3227,6 +3215,14 @@ void RecalculateCamera()
 	{
 		angle_xy = -1.57077;
 	}
+	if (angle_xz > PI)
+	{
+		angle_xz -= 2 * PI;
+	}
+	else if (angle_xz < -PI)
+	{
+		angle_xz += 2 * PI;
+	}
 	lx = sin(angle_xz) * cos(angle_xy);
 	ly = sin(angle_xy);
 	lz = -cos(angle_xz) * cos(angle_xy);
@@ -3316,45 +3312,153 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 	switch (key)
 	{
 	case GLUT_KEY_PAGE_UP:
-		cell_y_position++;
-		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
-		{
-			cell_y_position--;
-		}
-		break;
-	case GLUT_KEY_PAGE_DOWN:
 		cell_y_position--;
 		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
 		{
 			cell_y_position++;
 		}
 		break;
-	case GLUT_KEY_UP:
-		cell_x_position++;
+	case GLUT_KEY_PAGE_DOWN:
+		cell_y_position++;
 		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
 		{
+			cell_y_position--;
+		}
+		break;
+	case GLUT_KEY_UP:
+		if (-0.75 * PI <= angle_xz && angle_xz <= -0.25 * PI)
+		{
 			cell_x_position--;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position++;
+			}
+		}
+		else if (-0.25 * PI <= angle_xz && angle_xz <= 0.25 * PI)
+		{
+			cell_z_position--;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_z_position++;
+			}
+		}
+		else if(0.25 * PI <= angle_xz && angle_xz <= 0.75 * PI)
+		{
+			cell_x_position++;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position--;
+			}
+		}
+		else
+		{
+			cell_z_position++;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_z_position--;
+			}
 		}
 		break;
 	case GLUT_KEY_DOWN:
-		cell_x_position--;
-		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+		if (-0.75 * PI <= angle_xz && angle_xz <= -0.25 * PI)
 		{
 			cell_x_position++;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position--;
+			}
+		}
+		else if (-0.25 * PI <= angle_xz && angle_xz <= 0.25 * PI)
+		{
+			cell_z_position++;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_z_position--;
+			}
+		}
+		else if (0.25 * PI <= angle_xz && angle_xz <= 0.75 * PI)
+		{
+			cell_x_position--;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position++;
+			}
+		}
+		else
+		{
+			cell_z_position--;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_z_position++;
+			}
 		}
 		break;
 	case GLUT_KEY_LEFT:
-		cell_z_position--;
-		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+		if (-0.75 * PI <= angle_xz && angle_xz <= -0.25 * PI)
 		{
 			cell_z_position++;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_z_position--;
+			}
+		}
+		else if (-0.25 * PI <= angle_xz && angle_xz <= 0.25 * PI)
+		{
+			cell_x_position--;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position++;
+			}
+		}
+		else if (0.25 * PI <= angle_xz && angle_xz <= 0.75 * PI)
+		{
+			cell_z_position--;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_z_position++;
+			}
+		}
+		else
+		{
+			cell_x_position++;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position--;
+			}
 		}
 		break;
 	case GLUT_KEY_RIGHT:
-		cell_z_position++;
-		if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+		if (-0.75 * PI <= angle_xz && angle_xz <= -0.25 * PI)
 		{
 			cell_z_position--;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_z_position++;
+			}
+		}
+		else if (-0.25 * PI <= angle_xz && angle_xz <= 0.25 * PI)
+		{
+			cell_x_position++;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position--;
+			}
+		}
+		else if (0.25 * PI <= angle_xz && angle_xz <= 0.75 * PI)
+		{
+			cell_z_position++;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_z_position--;
+			}
+		}
+		else
+		{
+			cell_x_position--;
+			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
+			{
+				cell_x_position++;
+			}
 		}
 		break;
 	default:

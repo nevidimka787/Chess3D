@@ -71,7 +71,7 @@ List::List(int type_of_game)
 			{
 				for (int z = 1; z < 7; z++)
 				{
-					//entities[x + y * *lenght + z * *lenght * *weight] = 10;//(0, 1 , 1):(1, 6, 6) -> WHITE pawns
+					entities[x + y * *lenght + z * *lenght * *weight] = 10;//(0, 1 , 1):(1, 6, 6) -> WHITE pawns
 				}
 			}
 		}
@@ -81,7 +81,7 @@ List::List(int type_of_game)
 			{
 				for (int z = 1; z < 7; z++)
 				{
-					//entities[x + y * *lenght + z * *lenght * *weight] = -10;//(6, 1 , 1):(7, 6, 6) -> BLACK pawns
+					entities[x + y * *lenght + z * *lenght * *weight] = -10;//(6, 1 , 1):(7, 6, 6) -> BLACK pawns
 				}
 			}
 		}
