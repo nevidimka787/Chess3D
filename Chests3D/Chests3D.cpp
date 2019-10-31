@@ -22,7 +22,7 @@ const int BLACK_KING = -1, BLACK_SUPER_QUIN = -2, BLACK_QUIN_DIAGONAL = -3, BLAC
 
 float distance_between_figures = 3.0f;
 
-const float DELTA_DISTANCE_BETWEEN_FIGURES = 0.5f, MAX_DISTANCE_BETWEEN_FIGURES = 10.0f, MIN_DISTANCE_BETWEEN_FIGURES = 2.0f;
+const float DELTA_DISTANCE_BETWEEN_FIGURES = 0.5f, MAX_DISTANCE_BETWEEN_FIGURES = 10.0f, MIN_DISTANCE_BETWEEN_FIGURES = 2.0f, DEFAULT_ANGLE_OF_SHOW = 60.0, Z_NEAR = 0.1, Z_FAR = 1000.0;
 
 const float PI = 3.141592653589793;
 
@@ -42,7 +42,7 @@ int special_key_number = 0, normal_key_number = 0;
 
 short move_x = 0, move_y = 0, move_z = 0;//возможность перемещения по оси -1 - REVERS; 0 - STOP; 1 - FORVARD
 
-short draw_grid = 0;
+short draw_grid = 2;
 
 float red = 1.0f, blue = 1.0f, green = 1.0f, alpha = 0.1f;
 
@@ -56,7 +56,9 @@ float dx = 0.0f, dy = 0.0f, dz = 0.0f;// смещения по осям
 
 float x = -4.1f, y = 17.0f, z = 9.2f;// начальная позиция камеры
 
-float camera_speed = 0.1f, mouse_modification = 0.001f;// скорость 
+float camera_speed = 0.1f, mouse_modification = 0.001f, angle_of_show = DEFAULT_ANGLE_OF_SHOW;// скорость
+
+float wight_d_hight;
 
 float delta_red = 0.4f, delta_green = 0.4f, delta_blue = 0.4f;//Разница цветов между фигурами
 
@@ -67,7 +69,7 @@ bool show_lines = false, draw_all_variants = true;
 bool bottoms[100];
 bool mouse_motion = false;
 
-bool target_figure = false, draw_target_figure_all_variants = false;
+bool target_figure = false, draw_target_figure_all_variants = false, target_any_variants = false;
 
 double __angle__ = 0.3393;
 
@@ -3102,6 +3104,10 @@ void DrawAllVariants(int x_position, int y_position, int z_position, float red_p
 			glColor3f(red_pomponent, blue_pomponent, green_pomponent);
 			glutSolidCube(0.2f);
 			glPopMatrix();
+			if (!target_any_variants)
+			{
+				target_any_variants = true;
+			}
 		}
 	}
 }
@@ -3275,17 +3281,19 @@ void RenderScene()
 	mouse_motion = false;
 }
 
-void ChangeSize(int window_wight, int window_hight)
+void ChangeSize(int window_wight_now, int window_hight_now)
 {
 
 	// предупредим деление на ноль
 	// если окно сильно перетянуто будет
-	if (window_hight == 0)
+	if (window_hight_now == 0)
 	{
-		window_hight = 1;
+		window_hight_now = 1;
 	}
 
-	float ratio = 1.0 * window_wight / window_hight;
+	float ratio = 1.0 * window_wight_now / window_hight_now;
+
+	wight_d_hight = ratio;
 
 	// используем матрицу проекции
 	glMatrixMode(GL_PROJECTION);
@@ -3294,13 +3302,16 @@ void ChangeSize(int window_wight, int window_hight)
 	glLoadIdentity();
 
 	// определяем окно просмотра
-	glViewport(0, 0, window_wight, window_hight);
+	glViewport(0, 0, window_wight_now, window_hight_now);
 
 	// установить корректную перспективу.
-	gluPerspective(60, ratio, 1, 1000);
+	gluPerspective(angle_of_show, ratio, Z_NEAR, Z_FAR);
 
 	// вернуться к модели
 	glMatrixMode(GL_MODELVIEW);
+
+	window_wight = window_wight_now;
+	window_hight = window_hight_now;
 }
 
 //KEIS' FUNCTIONS...
@@ -3480,13 +3491,14 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 	switch (key)
 	{
 	case 13://Enter
-		if (!target_figure && (gamespase1->GetPoint(cell_x_position, cell_y_position, cell_z_position) > 0 && gamespase1->IsMoveWhite() || gamespase1->GetPoint(cell_x_position, cell_y_position, cell_z_position) < 0 && gamespase1->IsMoveBlack()))
+		if (!target_figure && (gamespase1->GetPoint(cell_x_position, cell_y_position, cell_z_position) > 0 && gamespase1->IsMoveWhite() || gamespase1->GetPoint(cell_x_position, cell_y_position, cell_z_position) < 0 && gamespase1->IsMoveBlack()) || !target_any_variants)
 		{
 			x_figure_position = cell_x_position;
 			y_figure_position = cell_y_position;
 			z_figure_position = cell_z_position;
 			draw_target_figure_all_variants = true;
 			target_figure = true;
+			target_any_variants = false;
 		}
 		else if (target_figure && x_target_position == cell_x_position && y_target_position == cell_y_position && z_target_position == cell_z_position)
 		{
@@ -3565,7 +3577,8 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 		std::cout << "x = " << x << '	' << "y = " << y << '	' << "z = " << z << std::endl
 			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl
 			<< "cell_x = " << cell_x_position << '	' << "cell_y = " << cell_y_position << '	' << "cell_z = " << cell_z_position << std::endl
-			<< "grid_number = " << draw_grid << " angle2 = " << __angle__ << std::endl;
+			<< "grid_number = " << draw_grid << " angle_of_show = " << angle_of_show << std::endl
+			<< "windows_wight " << window_wight << "	window_hight " << window_hight << std::endl;
 		break;
 	case '2':
 		__angle__ -= 0.0001;
@@ -3626,11 +3639,12 @@ void PressUpNormalKey(unsigned char key, int mouse_x_position, int mouse_y_posit
 
 //MOUSE's FUNCTIONS...
 
-void MouseFunc(int button, int buttom_state, int mouse_x_position, int mouse_y_position)
+void MouseFunc(int buttom, int buttom_state, int mouse_x_position, int mouse_y_position)
 {
+	float ratio;
 	if (buttom_state == GLUT_DOWN)
 	{
-		switch (button)
+		switch (buttom)
 		{
 		case GLUT_LEFT_BUTTON:
 			break;
@@ -3639,11 +3653,84 @@ void MouseFunc(int button, int buttom_state, int mouse_x_position, int mouse_y_p
 			mouse_x_position_last = mouse_x_position;
 			mouse_y_position_last = mouse_y_position;
 			break;
+		case GLUT_MIDDLE_BUTTON:
+			angle_of_show = DEFAULT_ANGLE_OF_SHOW;
+			// предупредим деление на ноль если окно сильно перетянуто будет
+
+			ratio = 1.0 * window_wight / window_hight;
+
+			wight_d_hight = ratio;
+
+			// используем матрицу проекции
+			glMatrixMode(GL_PROJECTION);
+
+			// Reset матрицы
+			glLoadIdentity();
+
+			// определяем окно просмотра
+			glViewport(0, 0, window_wight, window_hight);
+
+			// установить корректную перспективу.
+			gluPerspective(angle_of_show, ratio, Z_NEAR, Z_FAR);
+
+			// вернуться к модели
+			glMatrixMode(GL_MODELVIEW);
+			break;
+		case 3://колёсико вверх
+			angle_of_show -= 1;
+			// предупредим деление на ноль если окно сильно перетянуто будет
+
+			ratio = 1.0 * window_wight / window_hight;
+
+			wight_d_hight = ratio;
+
+			// используем матрицу проекции
+			glMatrixMode(GL_PROJECTION);
+
+			// Reset матрицы
+			glLoadIdentity();
+
+			// определяем окно просмотра
+			glViewport(0, 0, window_wight, window_hight);
+
+			// установить корректную перспективу.
+			gluPerspective(angle_of_show, ratio, Z_NEAR, Z_FAR);
+
+			// вернуться к модели
+			glMatrixMode(GL_MODELVIEW);
+			break;
+		case 4:
+			angle_of_show += 1;
+			// предупредим деление на ноль если окно сильно перетянуто будет
+
+			ratio = 1.0 * window_wight / window_hight;
+
+			wight_d_hight = ratio;
+
+			// используем матрицу проекции
+			glMatrixMode(GL_PROJECTION);
+
+			// Reset матрицы
+			glLoadIdentity();
+
+			// определяем окно просмотра
+			glViewport(0, 0, window_wight, window_hight);
+
+			// установить корректную перспективу.
+			gluPerspective(angle_of_show, ratio, Z_NEAR, Z_FAR);
+
+			// вернуться к модели
+			glMatrixMode(GL_MODELVIEW);
+			break;
+			break;
+		default://колёсико вниз
+			std::cout << "Mouse buttom " << buttom << std::endl;
+			break;
 		}
 	}
 	if (buttom_state == GLUT_UP)
 	{
-		switch (button)
+		switch (buttom)
 		{
 		case GLUT_RIGHT_BUTTON:
 			bottoms[2] = false;
