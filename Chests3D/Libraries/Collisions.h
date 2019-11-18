@@ -1,0 +1,6 @@
+#include "GL/glut.h"
+
+bool IsIntersectionLineAndTriangle(double line_x1, double line_y1, double line_z1, double line_x2, double line_y2, double line_z2, double triangle_x1, double triangle_y1, double triangle_z1, double triangle_x2, double triangle_y2, double triangle_z2, double triangle_x3, double triangle_y3, double triangle_z3);
+bool IsPointInTriangle(double point_x, double point_y, double point_z, double triangle_x1, double triangle_y1, double triangle_z1, double triangle_x2, double triangle_y2, double triangle_z2, double triangle_x3, double triangle_y3, double triangle_z3);
+void PointOfIntersectionLineAndPlane(double line_x1, double line_y1, double line_z1, double line_x2, double line_y2, double line_z2, double plane_x1, double plane_y1, double plane_z1, double plane_x2, double plane_y2, double plane_z2, double plane_x3, double plane_y3, double plane_z3, double* return_x, double* return_y, double* return_z);
+void PointOfIntersectionLineAndPlane(double line_x1, double line_y1, double line_z1, double line_x2, double line_y2, double line_z2, double plane_a_parameter, double plane_b_parameter, double plane_c_parameter, double plane_d_parameter, double* return_x, double* return_y, double* return_z);

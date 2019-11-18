@@ -12,6 +12,17 @@
 #define GAME_SPACE_H
 #include"Libraries/GameSpace.h"
 #endif
+
+#ifndef MATRIX_H
+#define MATRIX_H
+#include "Libraries/Matrix.h"
+#endif
+
+#ifndef COLLISIONS_H
+#define COLLISIONS_H
+#include"Libraries/Collisions.h"
+#endif
+
 //#include "Libraries/GameSpace.cpp"
 #include <GL/glut.h>//nupengl.core
 
