@@ -152,15 +152,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chests3D.cpp" />
+    <ClCompile Include="Libraries\Collisions.cpp" />
     <ClCompile Include="Libraries\GameSpace.cpp" />
     <ClCompile Include="Libraries\List.cpp" />
+    <ClCompile Include="Libraries\Matrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Libraries\Collisions.h" />
     <ClInclude Include="Libraries\GameSpace.h" />
     <ClInclude Include="Libraries\List.h" />
+    <ClInclude Include="Libraries\Matrix.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

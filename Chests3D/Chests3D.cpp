@@ -35,7 +35,7 @@ float distance_between_figures = 3.0f;
 
 const float DELTA_DISTANCE_BETWEEN_FIGURES = 0.5f, MAX_DISTANCE_BETWEEN_FIGURES = 10.0f, MIN_DISTANCE_BETWEEN_FIGURES = 2.0f, DEFAULT_ANGLE_OF_SHOW = 60.0, Z_NEAR = 0.1, Z_FAR = 1000.0;
 
-const float PI = 3.141592653589793;
+const float PI = 3.141592653589793, DEGREE_TO_RADIAN = 0.0174532925199433, RADIAN_TO_DEGREE = 57.29577951308232;;
 
 const bool WHITE = true, BLACK = false;
 
@@ -51,21 +51,21 @@ int x_figure_position = 0, y_figure_position = 0, z_figure_position = 0;
 
 int special_key_number = 0, normal_key_number = 0;
 
-short move_x = 0, move_y = 0, move_z = 0;//возможность перемещения по оси -1 - REVERS; 0 - STOP; 1 - FORVARD
+short can_move_x = 0, can_move_y = 0, can_move_z = 0;//возможность перемещения по оси -1 - REVERS; 0 - STOP; 1 - FORVARD
 
 short draw_grid = 2;
 
 float red = 1.0f, blue = 1.0f, green = 1.0f, alpha = 0.1f;
 
-double angle_xz = 1.48, angle_xy = -0.54, d_angle_xz = 0, d_angle_xy = 0;// угол поворота камеры
+double angle_of_camera_in_x = 0.0, angle_of_camera_in_y = 0.0, angular_speed_of_camera_in_x = 0, angular_speed_of_camera_in_y = 0;// угол поворота камеры
 
 float mouse_x_position_last = NULL, mouse_y_position_last = NULL;// значение предыдущей позиции мыши
 
-float lx = sin(angle_xz) * cos(angle_xy), ly = sin(angle_xy), lz = -cos(angle_xz) * cos(angle_xy);// координаты вектора направления движения камеры
+float viewpoint_of_camera_x = sin(angle_of_camera_in_x) * cos(angle_of_camera_in_y), viewpoint_of_camera_y = sin(angle_of_camera_in_y), viewpoint_of_camera_z = -cos(angle_of_camera_in_x) * cos(angle_of_camera_in_y);// координаты вектора направления движения камеры
 
 float dx = 0.0f, dy = 0.0f, dz = 0.0f;// смещения по осям
 
-float x = -4.1f, y = 17.0f, z = 9.2f;// начальная позиция камеры
+float camera_x_position = -4.1f, camera_y_position = 17.0f, camera_z_position = 9.2f;// начальная позиция камеры
 
 float camera_speed = 0.1f, mouse_modification = 0.001f, angle_of_show = DEFAULT_ANGLE_OF_SHOW;// скорость
 
@@ -73,22 +73,87 @@ float wight_d_hight;
 
 float delta_red = 0.4f, delta_green = 0.4f, delta_blue = 0.4f;//Разница цветов между фигурами
 
-bool forvard_backvard = true;
-
 bool show_lines = false, draw_all_variants = true;
 
-bool bottoms[100];
-bool mouse_motion = false;
+bool mouse_bottoms_active[100], mouse_is_motion_now = false, camera_translate_forvard = true;
 
 bool target_figure = false, draw_target_figure_all_variants = false, target_any_variants = false;
 
 double __angle__ = 0.3393;
 
+Matrix4x4* matrix = new Matrix4x4(1), *modelview_matrix = new Matrix4x4(1);
+
+void ConsoleClear()
+{
+	system("cls");
+}
 
 bool CellInSpace(int x, int y, int z)
 {
 	return (x < list->GetElement(0) && x > -1 && y < list->GetElement(1) && y > -1 && z < list->GetElement(2) && z > -1);
 }
+
+void RecalculateTriangle(double local_x1, double local_y1, double local_z1, double local_x2, double local_y2, double local_z2, double local_x3, double local_y3, double local_z3, double* return_global_x1, double* return_global_y1, double* return_global_z1, double* return_global_x2, double* return_global_y2, double* return_global_z2, double* return_global_x3, double* return_global_y3, double* return_global_z3)
+{
+	ConstMatrix1x4* first_point = new ConstMatrix1x4(local_x1, local_y1, local_z1, 1.0), * second_point = new ConstMatrix1x4(local_x2, local_y2, local_z2, 1.0), * fird_point = new ConstMatrix1x4(local_x3, local_y3, local_z3, 1.0);
+
+	*first_point = matrix->Multiply(*first_point);
+	*second_point = matrix->Multiply(*second_point);
+	*fird_point = matrix->Multiply(*fird_point);
+
+	*return_global_x1 = local_x1;
+	*return_global_y1 = local_y1;
+	*return_global_z1 = local_z1;
+	*return_global_x2 = local_x2;
+	*return_global_y2 = local_y2;
+	*return_global_z2 = local_z2;
+	*return_global_x3 = local_x3;
+	*return_global_y3 = local_y3;
+	*return_global_z3 = local_z3;
+}
+
+void DrawTriangle(double local_x1, double local_y1, double local_z1, double local_x2, double local_y2, double local_z2, double local_x3, double local_y3, double local_z3, double* return_global_x1, double* return_global_y1, double* return_global_z1, double* return_global_x2, double* return_global_y2, double* return_global_z2, double* return_global_x3, double* return_global_y3, double* return_global_z3)
+{
+	ConstMatrix1x4* first_point = new ConstMatrix1x4(local_x1, local_y1, local_z1, 1.0), * second_point = new ConstMatrix1x4(local_x2, local_y2, local_z2, 1.0), * fird_point = new ConstMatrix1x4(local_x3, local_y3, local_z3, 1.0);
+
+	glBegin(GL_TRIANGLES);
+
+	*first_point = matrix->Multiply(*first_point);
+	*second_point = matrix->Multiply(*second_point);
+	*fird_point = matrix->Multiply(*fird_point);
+	glVertex3d(first_point->a, first_point->b, first_point->c);
+	glVertex3d(second_point->a, second_point->b, second_point->c);
+	glVertex3d(fird_point->a, fird_point->b, fird_point->c);
+
+	glEnd();
+
+	*return_global_x1 = local_x1;
+	*return_global_y1 = local_y1;
+	*return_global_z1 = local_z1;
+	*return_global_x2 = local_x2;
+	*return_global_y2 = local_y2;
+	*return_global_z2 = local_z2;
+	*return_global_x3 = local_x3;
+	*return_global_y3 = local_y3;
+	*return_global_z3 = local_z3;
+}
+
+void DrawTriangle(double local_x1, double local_y1, double local_z1, double local_x2, double local_y2, double local_z2, double local_x3, double local_y3, double local_z3)
+{
+	ConstMatrix1x4* first_point = new ConstMatrix1x4(local_x1, local_y1, local_z1, 1.0), * second_point = new ConstMatrix1x4(local_x2, local_y2, local_z2, 1.0), * fird_point = new ConstMatrix1x4(local_x3, local_y3, local_z3, 1.0);
+
+	glBegin(GL_TRIANGLES);
+
+	*first_point = matrix->Multiply(*first_point);
+	*second_point = matrix->Multiply(*second_point);
+	*fird_point = matrix->Multiply(*fird_point);
+	glVertex3d(first_point->a, first_point->b, first_point->c);
+	glVertex3d(second_point->a, second_point->b, second_point->c);
+	glVertex3d(fird_point->a, fird_point->b, fird_point->c);
+
+	glEnd();
+}
+
 
 //RENDER's FUNCTIONS...
 
@@ -3222,46 +3287,60 @@ void DrawPoligon()
 
 void RecalculateCamera()
 {
-	angle_xy += d_angle_xy;
-	angle_xz += d_angle_xz;
-	if (angle_xy > 1.57077)
+	modelview_matrix->Reset(1);
+
+	angle_of_camera_in_y += angular_speed_of_camera_in_y;
+	angle_of_camera_in_x += angular_speed_of_camera_in_x;
+	if (angle_of_camera_in_y > 1.57077)
 	{
-		angle_xy = 1.57077;
+		angle_of_camera_in_y = 1.57077;
 	}
-	else if (angle_xy < -1.57077)
+	else if (angle_of_camera_in_y < -1.57077)
 	{
-		angle_xy = -1.57077;
+		angle_of_camera_in_y = -1.57077;
 	}
-	if (angle_xz > PI)
+	if (angle_of_camera_in_x > PI)
 	{
-		angle_xz -= 2 * PI;
+		angle_of_camera_in_x -= 2 * PI;
 	}
-	else if (angle_xz < -PI)
+	else if (angle_of_camera_in_x < -PI)
 	{
-		angle_xz += 2 * PI;
+		angle_of_camera_in_x += 2 * PI;
 	}
-	lx = sin(angle_xz) * cos(angle_xy);
-	ly = sin(angle_xy);
-	lz = -cos(angle_xz) * cos(angle_xy);
-	y += camera_speed * move_y;
-	if (forvard_backvard)
+	camera_y_position += camera_speed * can_move_y;
+	if (camera_translate_forvard)
 	{
-		x += sin(angle_xz) * camera_speed * move_x;
-		z += -cos(angle_xz) * camera_speed * move_z;
+		camera_x_position += sin(angle_of_camera_in_x) * camera_speed * can_move_x;
+		camera_z_position += -cos(angle_of_camera_in_x) * camera_speed * can_move_z;
 	}
 	else
 	{
-		x += cos(angle_xz) * camera_speed * move_x;
-		z += -sin(angle_xz) * camera_speed * move_z;
+		camera_x_position += cos(angle_of_camera_in_x) * camera_speed * can_move_x;
+		camera_z_position += -sin(angle_of_camera_in_x) * camera_speed * can_move_z;
 	}
 
+	modelview_matrix->Translate(camera_x_position, camera_y_position, camera_z_position);
+	modelview_matrix->RotateY(angle_of_camera_in_x);
+	modelview_matrix->RotateX(angle_of_camera_in_y);
+
+	camera_x_position = modelview_matrix->d;
+	camera_y_position = modelview_matrix->h;
+	camera_z_position = modelview_matrix->l;
+
+	modelview_matrix->Translate(0.0, 0.0, 1.0);
+
+	viewpoint_of_camera_x = modelview_matrix->d;
+	viewpoint_of_camera_y = modelview_matrix->h;
+	viewpoint_of_camera_z = modelview_matrix->l;
+
+	modelview_matrix->Translate(0.0, 0.0, -1.0);
 }
 
 void RenderCamera()
 {
 	RecalculateCamera();
-	gluLookAt(x, y, z,
-		x + lx, y + ly, z + lz,
+	gluLookAt(camera_x_position, camera_y_position, camera_z_position,
+		viewpoint_of_camera_x, viewpoint_of_camera_y, viewpoint_of_camera_z,
 		0.0f, 1.0f, 0.0f);// установка камеры
 }
 
@@ -3284,12 +3363,12 @@ void RenderScene()
 
 	glutSwapBuffers();
 
-	if (!mouse_motion)
+	if (!mouse_is_motion_now)
 	{
-		d_angle_xy = 0;
-		d_angle_xz = 0;
+		angular_speed_of_camera_in_y = 0;
+		angular_speed_of_camera_in_x = 0;
 	}
-	mouse_motion = false;
+	mouse_is_motion_now = false;
 }
 
 void ChangeSize(int window_wight_now, int window_hight_now)
@@ -3348,7 +3427,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 		}
 		break;
 	case GLUT_KEY_UP:
-		if (-0.75 * PI <= angle_xz && angle_xz <= -0.25 * PI)
+		if (-0.75 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= -0.25 * PI)
 		{
 			cell_x_position--;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3356,7 +3435,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 				cell_x_position++;
 			}
 		}
-		else if (-0.25 * PI <= angle_xz && angle_xz <= 0.25 * PI)
+		else if (-0.25 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= 0.25 * PI)
 		{
 			cell_z_position--;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3364,7 +3443,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 				cell_z_position++;
 			}
 		}
-		else if(0.25 * PI <= angle_xz && angle_xz <= 0.75 * PI)
+		else if(0.25 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= 0.75 * PI)
 		{
 			cell_x_position++;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3382,7 +3461,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 		}
 		break;
 	case GLUT_KEY_DOWN:
-		if (-0.75 * PI <= angle_xz && angle_xz <= -0.25 * PI)
+		if (-0.75 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= -0.25 * PI)
 		{
 			cell_x_position++;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3390,7 +3469,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 				cell_x_position--;
 			}
 		}
-		else if (-0.25 * PI <= angle_xz && angle_xz <= 0.25 * PI)
+		else if (-0.25 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= 0.25 * PI)
 		{
 			cell_z_position++;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3398,7 +3477,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 				cell_z_position--;
 			}
 		}
-		else if (0.25 * PI <= angle_xz && angle_xz <= 0.75 * PI)
+		else if (0.25 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= 0.75 * PI)
 		{
 			cell_x_position--;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3416,7 +3495,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 		}
 		break;
 	case GLUT_KEY_LEFT:
-		if (-0.75 * PI <= angle_xz && angle_xz <= -0.25 * PI)
+		if (-0.75 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= -0.25 * PI)
 		{
 			cell_z_position++;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3424,7 +3503,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 				cell_z_position--;
 			}
 		}
-		else if (-0.25 * PI <= angle_xz && angle_xz <= 0.25 * PI)
+		else if (-0.25 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= 0.25 * PI)
 		{
 			cell_x_position--;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3432,7 +3511,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 				cell_x_position++;
 			}
 		}
-		else if (0.25 * PI <= angle_xz && angle_xz <= 0.75 * PI)
+		else if (0.25 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= 0.75 * PI)
 		{
 			cell_z_position--;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3450,7 +3529,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 		}
 		break;
 	case GLUT_KEY_RIGHT:
-		if (-0.75 * PI <= angle_xz && angle_xz <= -0.25 * PI)
+		if (-0.75 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= -0.25 * PI)
 		{
 			cell_z_position--;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3458,7 +3537,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 				cell_z_position++;
 			}
 		}
-		else if (-0.25 * PI <= angle_xz && angle_xz <= 0.25 * PI)
+		else if (-0.25 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= 0.25 * PI)
 		{
 			cell_x_position++;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3466,7 +3545,7 @@ void PressSpecialKey(int key, int mouse_x_position, int mouse_y_position)
 				cell_x_position--;
 			}
 		}
-		else if (0.25 * PI <= angle_xz && angle_xz <= 0.75 * PI)
+		else if (0.25 * PI <= angle_of_camera_in_x && angle_of_camera_in_x <= 0.75 * PI)
 		{
 			cell_z_position++;
 			if (!CellInSpace(cell_x_position, cell_y_position, cell_z_position))
@@ -3542,19 +3621,23 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 		break;
 	case 'a':
 	case 244://ф a
-		forvard_backvard = false;
-		move_x = -1;
-		move_z = 1;
+		camera_translate_forvard = false;
+		can_move_x = 1;
+		can_move_z = 1;
+		break;
+	case 'c':
+	case 241://с c
+		ConsoleClear();
 		break;
 	case 'd':
 	case 226://в d
-		forvard_backvard = false;
-		move_x = 1;
-		move_z = -1;
+		camera_translate_forvard = false;
+		can_move_x = -1;
+		can_move_z = -1;
 		break;
 	case 'e':
 	case 243://у e
-		move_y = 1;
+		can_move_y = -1;
 		break;
 	case 'g':
 	case 239://g п
@@ -3569,24 +3652,24 @@ void PressNormalKey(unsigned char key, int mouse_x_position, int mouse_y_positio
 		break;
 	case 'q':
 	case 233://й q
-		move_y = -1;
+		can_move_y = 1;
 		break;
 	case 's':
 	case 251://ы s
-		forvard_backvard = true;
-		move_x = -1;
-		move_z = -1;
+		camera_translate_forvard = true;
+		can_move_x = -1;
+		can_move_z = 1;
 		break;
 	case 'w':
 	case 246://ц w
-		forvard_backvard = true;
-		move_x = 1;
-		move_z = 1;
+		camera_translate_forvard = true;
+		can_move_x = 1;
+		can_move_z = -1;
 		break;
 	case 'x':
 	case 247://ч x
-		std::cout << "x = " << x << '	' << "y = " << y << '	' << "z = " << z << std::endl
-			<< "angle_xz = " << angle_xz << '	' << "angle_xy = " << angle_xy << std::endl
+		std::cout << "x = " << camera_x_position << '	' << "y = " << camera_y_position << '	' << "z = " << camera_z_position << std::endl
+			<< "angle_of_camera_in_x = " << angle_of_camera_in_x << '	' << "angle_of_camera_in_y = " << angle_of_camera_in_y << std::endl
 			<< "cell_x = " << cell_x_position << '	' << "cell_y = " << cell_y_position << '	' << "cell_z = " << cell_z_position << std::endl
 			<< "grid_number = " << draw_grid << " angle_of_show = " << angle_of_show << std::endl
 			<< "windows_wight " << window_wight << "	window_hight " << window_hight << std::endl;
@@ -3628,21 +3711,21 @@ void PressUpNormalKey(unsigned char key, int mouse_x_position, int mouse_y_posit
 	case 'd':
 	case 244:
 	case 226:
-		move_x = 0;
-		move_z = 0;
+		can_move_x = 0;
+		can_move_z = 0;
 		break;
 	case 'e':
 	case 'q':
 	case 243:
 	case 233:
-		move_y = 0;
+		can_move_y = 0;
 		break;
 	case 's':
 	case 'w':
 	case 251:
 	case 246:
-		move_x = 0;
-		move_z = 0;
+		can_move_x = 0;
+		can_move_z = 0;
 		break;
 	}
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
@@ -3660,7 +3743,7 @@ void MouseFunc(int buttom, int buttom_state, int mouse_x_position, int mouse_y_p
 		case GLUT_LEFT_BUTTON:
 			break;
 		case GLUT_RIGHT_BUTTON:
-			bottoms[2] = true;
+			mouse_bottoms_active[2] = true;
 			mouse_x_position_last = mouse_x_position;
 			mouse_y_position_last = mouse_y_position;
 			break;
@@ -3744,11 +3827,11 @@ void MouseFunc(int buttom, int buttom_state, int mouse_x_position, int mouse_y_p
 		switch (buttom)
 		{
 		case GLUT_RIGHT_BUTTON:
-			bottoms[2] = false;
+			mouse_bottoms_active[2] = false;
 			mouse_x_position_last = NULL;
 			mouse_y_position_last = NULL;
-			d_angle_xz = 0;
-			d_angle_xy = 0;
+			angular_speed_of_camera_in_x = 0;
+			angular_speed_of_camera_in_y = 0;
 			break;
 		}
 	}
@@ -3756,11 +3839,11 @@ void MouseFunc(int buttom, int buttom_state, int mouse_x_position, int mouse_y_p
 
 void MotionFunc(int mouse_x_position, int mouse_y_position)
 {
-	mouse_motion = true;
-	if (bottoms[2])
+	mouse_is_motion_now = true;
+	if (mouse_bottoms_active[2])
 	{
-		d_angle_xz = (mouse_x_position - mouse_x_position_last) * mouse_modification;
-		d_angle_xy = (-mouse_y_position + mouse_y_position_last) * mouse_modification;
+		angular_speed_of_camera_in_x = (-mouse_x_position + mouse_x_position_last) * mouse_modification;
+		angular_speed_of_camera_in_y = (mouse_y_position - mouse_y_position_last) * mouse_modification;
 		mouse_x_position_last = mouse_x_position;
 		mouse_y_position_last = mouse_y_position;
 	}

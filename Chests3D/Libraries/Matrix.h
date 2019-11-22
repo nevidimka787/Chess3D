@@ -1,3 +1,5 @@
+#include "GL/glut.h"
+
 class ConstMatrix1x4
 {
 public:
@@ -11,6 +13,7 @@ class Matrix1x4
 public:
 	Matrix1x4(double matrix_a_component, double matrix_b_component, double matrix_c_component, double matrix_d_component);
 	Matrix1x4(int matrix_mode);
+	void Set(double matrix_parameters[]);
 
 	double a, b, c, d;
 };
@@ -22,11 +25,15 @@ public:
 	Matrix4x4(int matrix_mode);
 	ConstMatrix1x4 Multiply(ConstMatrix1x4 matrix);
 	Matrix1x4 Multiply(Matrix1x4 matrix);
+	Matrix4x4 Multiply(double number);
 	Matrix4x4 Multiply(Matrix4x4 matrix);
+	void Reset(int reset_mode);
 	void RotateX(double angle);
 	void RotateY(double angle);
 	void RotateZ(double angle);
 	void Scale(double x, double y, double z);
+	void Set(double matrix_parameters[]);
+	void Set(GLfloat matrix_parameters[]);
 	void Translate(double x, double y, double z);
 
 	double a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p;

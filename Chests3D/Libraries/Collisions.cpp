@@ -8,6 +8,18 @@ bool IsIntersectionLineAndTriangle(double line_x1, double line_y1, double line_z
 	return IsPointInTriangle(point_of_intersect_x, point_of_intersect_y, point_of_intersect_z, triangle_x1, triangle_y1, triangle_z1, triangle_x2, triangle_y2, triangle_z2, triangle_x3, triangle_y3, triangle_z3);
 }
 
+bool IsIntersectionLineAndTriangle(double line_x1, double line_y1, double line_z1, double line_x2, double line_y2, double line_z2, double triangle_x1, double triangle_y1, double triangle_z1, double triangle_x2, double triangle_y2, double triangle_z2, double triangle_x3, double triangle_y3, double triangle_z3, double* return_x, double* return_y, double* return_z)
+{
+	double point_of_intersect_x, point_of_intersect_y, point_of_intersect_z;
+	PointOfIntersectionLineAndPlane(line_x1, line_y1, line_z1, line_x2, line_y2, line_z2, triangle_x1, triangle_y1, triangle_z1, triangle_x2, triangle_y2, triangle_z2, triangle_x3, triangle_y3, triangle_z3, &point_of_intersect_x, &point_of_intersect_y, &point_of_intersect_z);
+
+	*return_x = point_of_intersect_x;
+	*return_y = point_of_intersect_y;
+	*return_z = point_of_intersect_z;
+
+	return IsPointInTriangle(point_of_intersect_x, point_of_intersect_y, point_of_intersect_z, triangle_x1, triangle_y1, triangle_z1, triangle_x2, triangle_y2, triangle_z2, triangle_x3, triangle_y3, triangle_z3);
+}
+
 bool IsPointInTriangle(double point_x, double point_y, double point_z, double triangle_x1, double triangle_y1, double triangle_z1, double triangle_x2, double triangle_y2, double triangle_z2, double triangle_x3, double triangle_y3, double triangle_z3)
 {
 	double ab_ac, bc_ba, ab_an, ac_an, bc_bn, ba_bn;
