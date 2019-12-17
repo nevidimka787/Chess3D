@@ -27,11 +27,6 @@ Matrix1x4::Matrix1x4(int matrix_mode)
 		b = 1.0;
 		c = 1.0;
 		d = 1.0;
-	case 2:
-		a = 1.0;
-		b = 1.0;
-		c = 1.0;
-		d = 0.0;
 	default:
 		a = 0.0;
 		b = 0.0;
@@ -39,14 +34,6 @@ Matrix1x4::Matrix1x4(int matrix_mode)
 		d = 0.0;
 		break;
 	}
-}
-
-void Matrix1x4::Set(double matrix_parameters[])
-{
-	a = matrix_parameters[0];
-	b = matrix_parameters[1];
-	c = matrix_parameters[2];
-	d = matrix_parameters[3];
 }
 
 
@@ -91,24 +78,6 @@ Matrix4x4::Matrix4x4(int matrix_mode)
 		n = 0.0;
 		o = 0.0;
 		p = 1.0;
-		break;
-	case 2:
-		a = 1.0;
-		b = 0.0;
-		c = 0.0;
-		d = 0.0;
-		e = 0.0;
-		f = 1.0;
-		g = 0.0;
-		h = 0.0;
-		i = 0.0;
-		j = 0.0;
-		k = 1.0;
-		l = 0.0;
-		m = 0.0;
-		n = 0.0;
-		o = 0.0;
-		p = 0.0;
 		break;
 	default:
 		a = 0.0;
@@ -157,12 +126,6 @@ Matrix1x4 Matrix4x4::Multiply(Matrix1x4 second_matrix)
 	return *return_matrix;
 }
 
-Matrix4x4 Matrix4x4::Multiply(double number)
-{
-	Matrix4x4* return_matrix = new Matrix4x4(a * number, b * number, c * number, d * number, e * number, f * number, g * number, h * number, i * number, j * number, k * number, l * number, m * number, n * number, o * number, p * number);
-	return *return_matrix;
-}
-
 Matrix4x4 Matrix4x4::Multiply(Matrix4x4 second_matrix)
 {
 	double new_a, new_b, new_c, new_d, new_e, new_f, new_g, new_h, new_i, new_j, new_k, new_l, new_m, new_n, new_o, new_p;
@@ -191,67 +154,6 @@ Matrix4x4 Matrix4x4::Multiply(Matrix4x4 second_matrix)
 	return *return_matrix;
 }
 
-void Matrix4x4::Reset(int matrix_mode)
-{
-	switch (matrix_mode)
-	{
-	case 1:
-		a = 1.0;
-		b = 0.0;
-		c = 0.0;
-		d = 0.0;
-		e = 0.0;
-		f = 1.0;
-		g = 0.0;
-		h = 0.0;
-		i = 0.0;
-		j = 0.0;
-		k = 1.0;
-		l = 0.0;
-		m = 0.0;
-		n = 0.0;
-		o = 0.0;
-		p = 1.0;
-		break;
-	case 2:
-		a = 1.0;
-		b = 0.0;
-		c = 0.0;
-		d = 0.0;
-		e = 0.0;
-		f = 1.0;
-		g = 0.0;
-		h = 0.0;
-		i = 0.0;
-		j = 0.0;
-		k = 1.0;
-		l = 0.0;
-		m = 0.0;
-		n = 0.0;
-		o = 0.0;
-		p = 0.0;
-		break;
-	default:
-		a = 0.0;
-		b = 0.0;
-		c = 0.0;
-		d = 0.0;
-		e = 0.0;
-		f = 0.0;
-		g = 0.0;
-		h = 0.0;
-		i = 0.0;
-		j = 0.0;
-		k = 0.0;
-		l = 0.0;
-		m = 0.0;
-		n = 0.0;
-		o = 0.0;
-		p = 0.0;
-		break;
-	}
-}
-
 void Matrix4x4::RotateX(double angle)
 {
 	Matrix4x4* new_matrix = new Matrix4x4(1.0, 0.0, 0.0, 0.0, 0.0, cos(angle), -sin(angle), 0.0, 0.0, sin(angle), cos(angle), 0.0, 0.0, 0.0, 0.0, 1.0);
@@ -275,47 +177,6 @@ void Matrix4x4::Scale(double x, double y, double z)
 	Matrix4x4* new_matrix = new Matrix4x4(x, 0.0, 0.0, 0.0, 0.0, y, 0.0, 0.0, 0.0, 0.0, z, 0.0, 0.0, 0.0, 0.0, 1.0);
 	*this = Multiply(*new_matrix);
 }
-
-void Matrix4x4::Set(double matrix_parameters[])
-{
-	a = matrix_parameters[0];
-	b = matrix_parameters[4];
-	c = matrix_parameters[8];
-	d = matrix_parameters[12];
-	e = matrix_parameters[1];
-	f = matrix_parameters[5];
-	g = matrix_parameters[9];
-	h = matrix_parameters[13];
-	i = matrix_parameters[2];
-	j = matrix_parameters[6];
-	k = matrix_parameters[10];
-	l = matrix_parameters[14];
-	m = matrix_parameters[3];
-	n = matrix_parameters[7];
-	o = matrix_parameters[11];
-	p = matrix_parameters[15];
-}
-
-void Matrix4x4::Set(GLfloat matrix_parameters[])
-{
-	a = matrix_parameters[0];
-	b = matrix_parameters[4];
-	c = matrix_parameters[8];
-	d = matrix_parameters[12];
-	e = matrix_parameters[1];
-	f = matrix_parameters[5];
-	g = matrix_parameters[9];
-	h = matrix_parameters[13];
-	i = matrix_parameters[2];
-	j = matrix_parameters[6];
-	k = matrix_parameters[10];
-	l = matrix_parameters[14];
-	m = matrix_parameters[3];
-	n = matrix_parameters[7];
-	o = matrix_parameters[11];
-	p = matrix_parameters[15];
-}
-
 
 void Matrix4x4::Translate(double x, double y, double z)
 {

@@ -40,7 +40,8 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	{
 	case 1://WHITE king
 	{
-		if (abs(x_start - x_end) == 1 && y_start == y_end && z_start == z_end || abs(y_start - y_end) == 1 && z_start == z_end && x_start == x_end || abs(z_start - z_end) == 1 && x_start == x_end && y_start == y_end)
+		//if (abs(x_start - x_end) == 1 && y_start == y_end && z_start == z_end || abs(y_start - y_end) == 1 && z_start == z_end && x_start == x_end || abs(z_start - z_end) == 1 && x_start == x_end && y_start == y_end)
+		if(abs(x_start - x_end) <= 1 && abs(y_start - y_end) <= 1 && abs(z_start - z_end) <= 1)
 		{//can go on the one point in all sides
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, true);
 		}
@@ -128,7 +129,8 @@ bool GameSpace::CanGo(int number, int x_end, int y_end, int z_end)
 	}
 	case -1://BLACK king
 	{
-		if (abs(x_start - x_end) == 1 && y_start == y_end && z_start == z_end || abs(y_start - y_end) == 1 && z_start == z_end && x_start == x_end || abs(z_start - z_end) == 1 && x_start == x_end && y_start == y_end)
+		//if (abs(x_start - x_end) == 1 && y_start == y_end && z_start == z_end || abs(y_start - y_end) == 1 && z_start == z_end && x_start == x_end || abs(z_start - z_end) == 1 && x_start == x_end && y_start == y_end)
+		if (abs(x_start - x_end) <= 1 && abs(y_start - y_end) <= 1 && abs(z_start - z_end) <= 1)
 		{//can go on the one point in all sides
 			return CanMove(x_start, y_start, z_start, x_end, y_end, z_end, false);
 		}
@@ -371,6 +373,7 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int end_numb
 
 bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, int y_end, int z_end)
 {
+	int *clone_type_of_figyre = new int;
 	if (x_end > * lenght - 1 || x_end < 0 || y_end > * wight - 1 || y_end < 0 || z_end > * hight - 1 || z_end < 0 || x_start > * lenght - 1 || x_start < 0 || y_start > * wight - 1 || y_start < 0 || z_start > * hight - 1 || z_start < 0 || (x_start == x_end && y_start == y_end && z_start == z_end))
 	{//(in space ) AND ( start != end )
 		return false;
@@ -386,15 +389,23 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *wight, x_end, y_end, z_end))
 		{
 			points[x_start + y_start * *lenght + z_start * *lenght * *wight] = 0;
+			*clone_type_of_figyre = points[x_end + y_end * *lenght + z_end * *lenght * *wight];
+			points[x_end + y_end * *lenght + z_end * *lenght * *wight] = 1;
 			for (int number = 0; number < *lenght * *wight * *hight; number++)
 			{
 				if (points[number] < 0 && CanGo(number, x_end, y_end, z_end))
 				{//no shakh
 					points[x_start + y_start * *lenght + z_start * *lenght * *wight] = 1;
+					points[x_end + y_end * *lenght + z_end * *lenght * *wight] = *clone_type_of_figyre;
+					delete clone_type_of_figyre;
+					clone_type_of_figyre = NULL;
 					return false;
 				}
 			}
 			points[x_start + y_start * *lenght + z_start * *lenght * *wight] = 1;
+			points[x_end + y_end * *lenght + z_end * *lenght * *wight] = *clone_type_of_figyre;
+			delete clone_type_of_figyre;
+			clone_type_of_figyre = NULL;
 			return true;
 		}
 		break;
@@ -479,15 +490,24 @@ bool GameSpace::MeetGameRule(int x_start, int y_start, int z_start, int x_end, i
 		if (CanGo(x_start + y_start * *lenght + z_start * *lenght * *wight, x_end, y_end, z_end))
 		{
 			points[x_start + y_start * *lenght + z_start * *lenght * *wight] = 0;
+			*clone_type_of_figyre = points[x_end + y_end * *lenght + z_end * *lenght * *wight];
+			points[x_end + y_end * *lenght + z_end * *lenght * *wight] = -1;
+
 			for (int number = 0; number < *lenght * *wight * *hight; number++)
 			{
 				if (points[number] > 0 && CanGo(number, x_end, y_end, z_end))
 				{//no shakh
-					points[x_start + y_start * *lenght + z_start * *lenght * *wight] = 1;
+					points[x_start + y_start * *lenght + z_start * *lenght * *wight] = -1;
+					points[x_end + y_end * *lenght + z_end * *lenght * *wight] = *clone_type_of_figyre;
+					delete clone_type_of_figyre;
+					clone_type_of_figyre = NULL;
 					return false;
 				}
 			}
 			points[x_start + y_start * *lenght + z_start * *lenght * *wight] = -1;
+			points[x_end + y_end * *lenght + z_end * *lenght * *wight] = *clone_type_of_figyre;
+			delete clone_type_of_figyre;
+			clone_type_of_figyre = NULL;
 			return true;
 		}
 		break;
